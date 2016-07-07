@@ -17,25 +17,55 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import java.sql.*;
+import javafx.scene.control.TextField;
+import rpt.RPT;
 
 /**
  *
  * @author colak
  */
 public class LoginController implements Initializable {
+    @FXML
+            TextField cdsidField;
+    @FXML
+            TextField passwordField;
+    @FXML
+            Label wrongLogin;
+    @FXML
+            private Button loginButton;
     
     @FXML
-    private Button loginButton;
-    
-    @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException {
-       //Switch to another stage - Main stage
-       Parent root = FXMLLoader.load(getClass().getResource("/rpt/GUI/MainWindow.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage=(Stage) loginButton.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+    private void loginButton(ActionEvent event) throws IOException {
+       //Check user password
+       String password = "";
+       try {
+           Statement statement = RPT.conn.createStatement();
+           statement.setQueryTimeout(30);
+           String query = "SELECT * FROM USERS WHERE cdsid = '" + cdsidField.getText() + "'";
+           ResultSet rs = statement.executeQuery(query);
+           
+           //Extract password
+           password = rs.getString("password");
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
         
+        if (password.equals(passwordField.getText())){
+           //Switch to another stage - Main stage
+            Parent root = FXMLLoader.load(getClass().getResource("/rpt/GUI/MainWindow.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=(Stage) loginButton.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show(); 
+        }
+        else{
+           cdsidField.clear();
+           passwordField.clear();
+           wrongLogin.setVisible(true);   
+        }
+           
     }
     
     @Override
