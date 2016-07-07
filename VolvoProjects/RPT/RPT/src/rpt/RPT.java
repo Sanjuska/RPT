@@ -10,12 +10,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.sql.*;
 
 /**
  *
  * @author colak
  */
 public class RPT extends Application {
+    //Database connector 
+    public static Connection conn = null;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -33,6 +36,18 @@ public class RPT extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        //Connect to database
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:RPT.sqlite");
+            System.out.println("Opened database successfully");
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+            
+        
+        //launch main view
         launch(args);
     }
     
