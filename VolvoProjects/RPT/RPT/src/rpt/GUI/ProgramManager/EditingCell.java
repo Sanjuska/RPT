@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rpt.GUI.Tabs;
+package rpt.GUI.ProgramManager;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
