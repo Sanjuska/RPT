@@ -133,6 +133,8 @@ public class MainWindowController implements Initializable {
                                         
                                         //Pane newLoadedPane =  FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles.fxml"));           
                                        // contentPane.getChildren().add(newLoadedPane);
+                                       //komentar
+                                       
                                        contentPane.getChildren().clear();
                                        
                                        contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles.fxml")));
