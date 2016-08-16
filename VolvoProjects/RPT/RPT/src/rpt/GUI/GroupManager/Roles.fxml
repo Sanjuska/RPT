@@ -10,14 +10,13 @@
    <children>
       <ToolBar prefHeight="30.0" prefWidth="600.0">
         <items>
-          <Button mnemonicParsing="false" text="Button" />
-            <Button mnemonicParsing="false" text="Button" />
-            <Button mnemonicParsing="false" text="Button" />
+          <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Add" />
+            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Remove" />
         </items>
       </ToolBar>
-      <TableView fx:id="tableRoles" layoutY="39.0" prefHeight="361.0" prefWidth="600.0">
+      <TableView fx:id="tableRoles" editable="true" layoutY="39.0" prefHeight="361.0" prefWidth="600.0">
         <columns>
-          <TableColumn fx:id="rolesColumn" prefWidth="599.0" text="ROLES" />
+          <TableColumn fx:id="rolesColumn" prefWidth="599.0" text="Roles" />
         </columns>
       </TableView>
    </children>
