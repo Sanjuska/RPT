@@ -69,7 +69,7 @@ public class RolesController implements Initializable {
         if (event.getSource() == addButton) {
             //Open the PopUp window with implementation fields
             stage = new Stage();
-            root = FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/AddDialog.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/AddDialog.fxml"));
             stage.setScene(new Scene(root));
             stage.setTitle("Add");
             stage.initModality(Modality.APPLICATION_MODAL);
