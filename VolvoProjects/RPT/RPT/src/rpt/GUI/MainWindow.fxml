@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="602.0" prefWidth="731.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.MainWindowController">
+<AnchorPane prefHeight="602.0" prefWidth="731.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.MainWindowController">
    <children>
       <BorderPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -35,14 +35,14 @@
             </MenuBar>
          </top>
          <left>
-            <VBox prefHeight="579.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="579.0" prefWidth="224.0" BorderPane.alignment="CENTER">
                <children>
-                  <TreeView fx:id="tree" prefHeight="576.0" prefWidth="224.0" />
+                  <TreeView fx:id="tree" maxHeight="1.7976931348623157E308" prefHeight="576.0" prefWidth="224.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </left>
          <center>
-            <Pane fx:id="contentPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <Pane fx:id="contentPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
             <Label text="Label" BorderPane.alignment="CENTER" />
