@@ -5,7 +5,7 @@
  */
 package rpt.GUI.GroupManager.Roles;
 
-import rpt.GUI.GroupManager.Roles.TableViewCells;
+import rpt.GUI.GroupManager.Roles.TableRoles;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,6 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -37,69 +38,68 @@ public class RolesController implements Initializable {
      * Initializes the controller class.
      */
     @FXML
-            public TableView <TableViewCells> tableRoles;
-     @FXML
-            public TableColumn<TableViewCells, String> rolesColumn;
+    AnchorPane anchorPane;
     @FXML
-            Button addButton;
-     @FXML
-            Button removeButton;
-     
-    
-     // ObservableList object enables the tracking of any changes to its elements
-    private static ObservableList<TableViewCells> data = FXCollections.observableArrayList(
-           new TableViewCells ("Group Manager")
+    public TableView<TableRoles> tableRoles;
+    @FXML
+    public TableColumn<TableRoles, String> rolesColumn;
+    @FXML
+    Button addButton;
+    @FXML
+    Button removeButton;
+
+    // ObservableList object enables the tracking of any changes to its elements
+    private static ObservableList<TableRoles> data = FXCollections.observableArrayList(new TableRoles("Group Manager")
     );
-     
-       //Create table's data, get all of the items
-    public static ObservableList<TableViewCells> getRoles(){
+
+    //Create table's data, get all of the items
+    public static ObservableList<TableRoles> getRoles() {
         return data;
     }
-    
+
     //Add entry into table
-    public static void add(TableViewCells entry){
+    public static void add(TableRoles entry) {
         data.add(entry);
     }
-     
+
     @FXML
     public void addButtonClicked(ActionEvent event) throws IOException {
         Stage stage;
         Parent root;
-        if(event.getSource()==addButton)
-        {
+        if (event.getSource() == addButton) {
             //Open the PopUp window with implementation fields
             stage = new Stage();
             root = FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/AddDialog.fxml"));
-            stage.setScene(new Scene(root)); 
+            stage.setScene(new Scene(root));
             stage.setTitle("Add");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(addButton.getScene().getWindow());
             stage.showAndWait();
-        }
-        else
-        {
-            stage=(Stage)removeButton.getScene().getWindow();
+        } else {
+            stage = (Stage) removeButton.getScene().getWindow();
             stage.close();
         }
-        
+
     }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         tableRoles.setEditable(true);
-        
+
         //specify a cell factory  and enable it editable
         rolesColumn.setCellValueFactory(new PropertyValueFactory("rolesNamColumn")); //connect to the private variables in the table
         rolesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        rolesColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableViewCells, String>>() {
+        rolesColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableRoles, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<TableViewCells, String> event) {
-              ((TableViewCells) event.getTableView().getItems().get(event.getTablePosition().getRow())).setRolesNamColumn(event.getNewValue());
-            }  
+            public void handle(TableColumn.CellEditEvent<TableRoles, String> event) {
+                ((TableRoles) event.getTableView().getItems().get(event.getTablePosition().getRow())).setRolesNamColumn(event.getNewValue());
+            }
         });
-        
+
         //Push into the table
         tableRoles.setItems(data);
-    }    
-    
+        anchorPane.autosize();
+        
+    }
+
 }

@@ -9,7 +9,7 @@ package rpt.GUI.GroupManager.Roles;
  *
  * @author colak
  */
-public class TableViewCells {
+public class TableRoles {
 
     
     
@@ -17,11 +17,11 @@ public class TableViewCells {
     private String rolesNamColumn;
     
    //Constructor with no parameters
-    public TableViewCells(){
+    public TableRoles(){
         this.rolesNamColumn = "";
     }
    //Constructor with parameters
-    public TableViewCells(String rolesNamColumn) {
+    public TableRoles(String rolesNamColumn) {
         this.rolesNamColumn = rolesNamColumn;
     }
     

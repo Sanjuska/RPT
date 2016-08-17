@@ -38,6 +38,7 @@ public class MainWindowController implements Initializable {
     @FXML
         Pane contentPane;
     
+    
     //Icon for every branch (Manager group)
     private final Node programManagerIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))

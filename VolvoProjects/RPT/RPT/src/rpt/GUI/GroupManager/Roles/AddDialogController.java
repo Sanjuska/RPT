@@ -44,7 +44,7 @@ public class AddDialogController implements Initializable {
      //add item into table
     public void add(){
           //create entry for the table
-        TableViewCells entry = new TableViewCells();
+        TableRoles entry = new TableRoles();
         entry.setRolesNamColumn(rolesTextField.getText());
         
        //insert data in the table

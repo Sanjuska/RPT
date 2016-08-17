@@ -5,19 +5,29 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.GroupManager.RolesController">
+<AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.GroupManager.Roles.RolesController">
    <children>
-      <ToolBar prefHeight="30.0" prefWidth="600.0">
-        <items>
-          <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Add" />
-            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Remove" />
-        </items>
-      </ToolBar>
-      <TableView fx:id="tableRoles" editable="true" layoutY="39.0" prefHeight="361.0" prefWidth="600.0">
-        <columns>
-          <TableColumn fx:id="rolesColumn" prefWidth="599.0" text="Roles" />
-        </columns>
-      </TableView>
+      <Pane AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" >
+         <children>
+            <TableView fx:id="tableRoles" editable="true" prefHeight="600.0" prefWidth="800.0">
+              <columns>
+                <TableColumn fx:id="rolesColumn" prefWidth="599.0" text="Roles" />
+              </columns>
+            </TableView>
+         </children>
+      </Pane>
+      <HBox prefHeight="27.0" prefWidth="800.0" AnchorPane.bottomAnchor="561.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ToolBar prefHeight="43.0" prefWidth="800.0">
+              <items>
+                <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Add" />
+                  <Button fx:id="removeButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Remove" />
+              </items>
+            </ToolBar>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
