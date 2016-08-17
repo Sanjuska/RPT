@@ -128,21 +128,36 @@ public class MainWindowController implements Initializable {
                  if (newValue != null)
                      System.out.println(newValue.getValue());
                  switch (newValue.getValue()){
-                     case "Roles": System.out.println("Open roles:"); 
-                                    try {
-                                        
-                                        //Pane newLoadedPane =  FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles.fxml"));           
-                                       // contentPane.getChildren().add(newLoadedPane);
-                                       //komentar
-                                       
-                                       contentPane.getChildren().clear();
-                                       
-                                       contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles.fxml")));
-                                    }catch (IOException e){
-                                        e.printStackTrace();
-                                    }
-                                    contentPane.autosize();
-                                    break;
+                     case "Roles":
+                         System.out.println("Open roles:");
+                         try {
+
+                             //Pane newLoadedPane =  FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles.fxml"));           
+                             // contentPane.getChildren().add(newLoadedPane);
+                             //komentar
+                             contentPane.getChildren().clear();
+
+                             contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/Roles.fxml")));
+                         } catch (IOException e) {
+                             e.printStackTrace();
+                         }
+                         contentPane.autosize();
+                         break;
+                     case "Variants":
+                         System.out.println("Open Variants:");
+                         try {
+
+                             //remove old content in main view pane
+                             contentPane.getChildren().clear();
+
+                             //load new view in main view pane
+                             contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/Variants.fxml")));
+                         } catch (IOException e) {
+                             e.printStackTrace();
+                         }
+                         contentPane.autosize();
+                         break;
+                     
                  }
              });
     
