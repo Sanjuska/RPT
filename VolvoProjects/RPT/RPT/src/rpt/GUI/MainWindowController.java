@@ -20,6 +20,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
 
 
 /**
@@ -35,8 +36,12 @@ public class MainWindowController implements Initializable {
      */
     @FXML
         TreeView<String> tree;
+    //@FXML
+        //Pane contentPane;
     @FXML
-        Pane contentPane;
+        BorderPane viewPane;
+    
+    
     
     
     //Icon for every branch (Manager group)
@@ -136,27 +141,25 @@ public class MainWindowController implements Initializable {
                              //Pane newLoadedPane =  FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles.fxml"));           
                              // contentPane.getChildren().add(newLoadedPane);
                              //komentar
-                             contentPane.getChildren().clear();
+                             //contentPane.getChildren().clear();
 
-                             contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/Roles.fxml")));
+                             //contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/Roles.fxml")));
+                             
+                             //load new view in main view pane 
+                             viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/Roles.fxml")));
                          } catch (IOException e) {
                              e.printStackTrace();
                          }
-                         contentPane.autosize();
+                         //contentPane.autosize();
                          break;
                      case "Variants":
                          System.out.println("Open Variants:");
                          try {
-
-                             //remove old content in main view pane
-                             contentPane.getChildren().clear();
-
-                             //load new view in main view pane
-                             contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/Variants.fxml")));
+                             //load new view in main view pane   
+                             viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/Variants.fxml")));
                          } catch (IOException e) {
                              e.printStackTrace();
                          }
-                         contentPane.autosize();
                          break;
                      
                  }
