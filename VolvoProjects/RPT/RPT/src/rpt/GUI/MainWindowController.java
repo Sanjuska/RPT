@@ -134,23 +134,24 @@ public class MainWindowController implements Initializable {
                  if (newValue != null)
                      System.out.println(newValue.getValue());
                  switch (newValue.getValue()){
+                      case "Own resources":
+                         System.out.println("Open Own resources:");
+                         try {
+                             //load new view in main view pane 
+                             viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/OwnResources/OwnResources.fxml")));
+                         } catch (IOException e) {
+                             e.printStackTrace();
+                         }
+                         //contentPane.autosize();
+                         break;
                      case "Roles":
                          System.out.println("Open roles:");
                          try {
-
-                             //Pane newLoadedPane =  FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles.fxml"));           
-                             // contentPane.getChildren().add(newLoadedPane);
-                             //komentar
-                             //contentPane.getChildren().clear();
-
-                             //contentPane.getChildren().add(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/Roles.fxml")));
-                             
                              //load new view in main view pane 
                              viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/Roles.fxml")));
                          } catch (IOException e) {
                              e.printStackTrace();
                          }
-                         //contentPane.autosize();
                          break;
                      case "Variants":
                          System.out.println("Open Variants:");
