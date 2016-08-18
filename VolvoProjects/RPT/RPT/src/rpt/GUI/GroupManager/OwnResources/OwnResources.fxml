@@ -21,7 +21,7 @@
                <graphic>
                   <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../Icons/addIcon.png" />
+                        <Image url="@../../../../Icons/addNameIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -30,7 +30,7 @@
                <graphic>
                   <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../Icons/removeIcon.png" />
+                        <Image url="@../../../../Icons/removeUserIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
