@@ -19,13 +19,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import rpt.GUI.ProgramManager.TableVariants;
 
 /**
  * FXML Controller class
@@ -37,8 +40,7 @@ public class RolesController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    @FXML
-    AnchorPane anchorPane;
+    
     @FXML
     public TableView<TableRoles> tableRoles;
     @FXML
@@ -71,15 +73,20 @@ public class RolesController implements Initializable {
             stage = new Stage();
             root = FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/AddDialog.fxml"));
             stage.setScene(new Scene(root));
-            stage.setTitle("Add");
+            stage.setTitle("Add role");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(addButton.getScene().getWindow());
             stage.showAndWait();
-        } else {
-            stage = (Stage) removeButton.getScene().getWindow();
-            stage.close();
-        }
+        } 
+        
 
+    }
+    //Give the function to remove button
+    public void removeButtonClicked (){
+    ObservableList<TableRoles> removeVariants;
+    tableRoles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    removeVariants = tableRoles.getSelectionModel().getSelectedItems();
+    tableRoles.getItems().removeAll(removeVariants);
     }
 
     @Override
@@ -98,7 +105,11 @@ public class RolesController implements Initializable {
 
         //Push into the table
         tableRoles.setItems(data);
-        anchorPane.autosize();
+        
+        //tooltips
+         addButton.setTooltip(new Tooltip("Add new role"));
+         removeButton.setTooltip(new Tooltip("Remove selected roles"));  
+        
         
     }
 

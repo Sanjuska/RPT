@@ -4,30 +4,40 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.GroupManager.Roles.RolesController">
-   <children>
-      <Pane AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0" >
-         <children>
-            <TableView fx:id="tableRoles" editable="true" prefHeight="600.0" prefWidth="800.0">
-              <columns>
-                <TableColumn fx:id="rolesColumn" prefWidth="599.0" text="Roles" />
-              </columns>
-            </TableView>
-         </children>
-      </Pane>
-      <HBox prefHeight="27.0" prefWidth="800.0" AnchorPane.bottomAnchor="561.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <ToolBar prefHeight="43.0" prefWidth="800.0">
-              <items>
-                <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Add" />
-                  <Button fx:id="removeButton" mnemonicParsing="false" onAction="#addButtonClicked" text="Remove" />
-              </items>
-            </ToolBar>
-         </children>
-      </HBox>
-   </children>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.GroupManager.Roles.RolesController">
+   <center>
+      <TableView fx:id="tableRoles" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="rolesColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="800.0" text="Roles" />
+        </columns>
+      </TableView>
+   </center>
+   <top>
+      <ToolBar maxWidth="1.7976931348623157E308" prefHeight="43.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+        <items>
+          <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonClicked">
+               <graphic>
+                  <ImageView fitHeight="48.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../Icons/addIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeButtonClicked">
+               <graphic>
+                  <ImageView fitHeight="14.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../Icons/removeIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+        </items>
+      </ToolBar>
+   </top>
+</BorderPane>
