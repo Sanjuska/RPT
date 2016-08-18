@@ -32,7 +32,7 @@
          <top>
             <ToolBar maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="750.0" BorderPane.alignment="TOP_LEFT">
                <items>
-                  <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addButtonClicked" textOverrun="CLIP">
+                  <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addButtonClicked" text="Add" textOverrun="CLIP">
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="12.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -54,7 +54,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </Button>
-                  <Button fx:id="removeButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#removeButtonClicked">
+                  <Button fx:id="removeButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeButtonClicked" text="Remove">
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -95,6 +95,18 @@
                         <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../Icons/saveIcon.png" />
+                           </image>
+                           <effect>
+                              <Blend />
+                           </effect>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="importButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#importButtonClicked" text="Import" textOverrun="CLIP">
+                     <graphic>
+                        <ImageView fitHeight="12.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/importIcon.png" />
                            </image>
                            <effect>
                               <Blend />

@@ -7,6 +7,7 @@ package rpt.GUI.ProgramManager.Variants;
 
 import rpt.GUI.ProgramManager.*;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Observable;
@@ -39,6 +40,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * FXML Controller class
@@ -71,6 +74,8 @@ public class VariantsController implements Initializable {
             Button removeButton;
     @FXML
             Button saveButton;
+    @FXML
+            Button importButton;
             
    
     //Create table's data, get all of the items
@@ -84,40 +89,53 @@ public class VariantsController implements Initializable {
     //Add entry into table
     public static void add(TableVariants entry){
         data.add(entry); 
-        //System.out.println(data.);
     }
-    //Give the function to add button
-    @FXML
+    
+    //Add button action handler
     public void addButtonClicked(ActionEvent event) throws IOException {
         Stage stage;
         Parent root;
-        if(event.getSource()==addButton)
-        {
-            //Open the PopUp window with implementation fields
-            stage = new Stage();
-                root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/AddDialog.fxml"));
-            stage.setScene(new Scene(root)); 
-            stage.setTitle("Add");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initOwner(addButton.getScene().getWindow());
-            stage.showAndWait();
-        }
-        else
-        {
-            stage=(Stage)removeButton.getScene().getWindow();
-            stage.close();
-        }
         
+        //Open the PopUp window with implementation fields
+        stage = new Stage();
+        root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/AddDialog.fxml"));
+        stage.setScene(new Scene(root)); 
+        stage.setTitle("Add");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(addButton.getScene().getWindow());
+        stage.showAndWait();
     }
-    
-    //Give the function to remove button
+
+    //Remove button action handler
     public void removeButtonClicked (){
-    ObservableList<TableVariants> removeVariants;
-    tableVariants.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    removeVariants = tableVariants.getSelectionModel().getSelectedItems();
-    tableVariants.getItems().removeAll(removeVariants);
-}         
-    //Navigate through table using and arrows
+        ObservableList<TableVariants> removeVariants;
+        tableVariants.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        removeVariants = tableVariants.getSelectionModel().getSelectedItems();
+        tableVariants.getItems().removeAll(removeVariants);
+    }        
+    
+    //Import button action handler
+    public void importButtonClicked(ActionEvent event) throws IOException {
+        
+        //Create File Chooser window
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Excel File");
+        
+        //Set filter to allow only Excel files
+        ExtensionFilter filter = new ExtensionFilter("Excel Files", "*.xls", "*.xlsx");
+        fileChooser.getExtensionFilters().addAll(filter);
+        
+        //Show File Selector
+        File selectedFile = fileChooser.showOpenDialog(null);
+        
+        //import Excel file if a file has been selected, if not, do nothing
+        if (selectedFile != null) {
+            System.out.println("File selected: " + selectedFile.getName());
+        }//TODO remove the else, we don't do anything if the user presses Cancel
+        else {
+            System.out.println("File selection cancelled.");
+        }
+    }
     
   
     @Override
