@@ -5,9 +5,13 @@
  */
 package rpt.GUI.GroupManager.OwnResources;
 
+import static java.awt.PageAttributes.ColorType.COLOR;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,19 +19,27 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import rpt.GUI.ProgramManager.TableVariants;
 
 /**
@@ -54,7 +66,7 @@ public class OwnResourcesController implements Initializable {
     public TableColumn<TableOwnResources, String> monthAColumn;
     
     @FXML
-    public TableColumn<TableOwnResources, String> monthBColumn;
+    public TableColumn<TableOwnResources, TableOwnResources> monthBColumn;
     
     @FXML
     public TableColumn<TableOwnResources, String> monthCColumn;
@@ -80,10 +92,15 @@ public class OwnResourcesController implements Initializable {
     @FXML
     DatePicker finishDatePicker;
     
+    static Pane arcContainer = new Pane();
+    @FXML
+    Arc arc;
 
+    
     // ObservableList object enables the tracking of any changes to its elements
     private static ObservableList<TableOwnResources> data = FXCollections.observableArrayList(
-            new TableOwnResources("Tupak", "Employee", "100%","0","3%","95%")
+            new TableOwnResources("Tupak", "Employee", "100%",35,"3%","95%"),
+            new TableOwnResources("Bubca", "Employee", "85%", 85,"15%", "100%")
     );
 
     //Create table's data, get all of the items
@@ -153,15 +170,65 @@ public class OwnResourcesController implements Initializable {
             }
          
         });
-        monthBColumn.setCellValueFactory(new PropertyValueFactory("monthB")); //connect to the private variables in the table
-        monthBColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        monthBColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableOwnResources, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<TableOwnResources, String> event) {
-                ((TableOwnResources) event.getTableView().getItems().get(event.getTablePosition().getRow())).setMonthB(event.getNewValue());
-            }
+        //TODO
+        //Use the code example from below to allow insertion of graphical objects instead of text.
+        //insert arc shape filled to the level of employee load. <90% => yellow, 90-105% => greenYellow, >105% => red
+        //http://stackoverflow.com/questions/16360323/javafx-table-how-to-add-components
+        //monthBColumn.setCellValueFactory(new PropertyValueFactory("monthB")); //connect to the private variables in the table
+        //monthBColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        //monthBColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableOwnResources, String>>() {
+        //    @Override
+        //    public void handle(TableColumn.CellEditEvent<TableOwnResources, String> event) {
+        //        ((TableOwnResources) event.getTableView().getItems().get(event.getTablePosition().getRow())).setMonthB(event.getNewValue());
+        //    }
          
+        //});
+        monthBColumn.setCellValueFactory(new Callback<CellDataFeatures<TableOwnResources, TableOwnResources>, ObservableValue<TableOwnResources>>() {
+          @Override public ObservableValue<TableOwnResources> call(CellDataFeatures<TableOwnResources, TableOwnResources> features) {
+              return new ReadOnlyObjectWrapper(features.getValue());
+          }
         });
+        monthBColumn.setComparator(new Comparator<TableOwnResources>() {
+           @Override public int compare(TableOwnResources row1, TableOwnResources row2) {
+                return row1.getMonthB() - row2.getMonthB();
+                }
+           });
+        monthBColumn.setCellFactory(new Callback<TableColumn<TableOwnResources, TableOwnResources>, TableCell<TableOwnResources, TableOwnResources>>() {
+          @Override public TableCell<TableOwnResources, TableOwnResources> call(TableColumn<TableOwnResources, TableOwnResources> monthBColumn) {
+            return new TableCell<TableOwnResources, TableOwnResources>() {
+                final Arc arcCell = new Arc(); 
+                {
+                    arcCell.setCenterX(5.0f);
+                    arcCell.setCenterY(5.0f);
+                    arcCell.setRadiusX(10.0f);
+                    arcCell.setRadiusY(10.0f);
+                    arcCell.setStartAngle(90.0f);
+                    arcCell.setType(ArcType.ROUND);
+                    arcCell.setStrokeType(StrokeType.OUTSIDE);
+                    arcCell.setStroke(Color.BLACK);
+                    Color fillColor = Color.rgb(102,255,0,1.0);
+                    arcCell.setFill(fillColor);
+                    
+              }
+              @Override public void updateItem(final TableOwnResources resource, boolean empty) {
+                super.updateItem(resource, empty);
+                
+                
+                if (resource != null) {
+                      arcCell.setLength(-(resource.getMonthB()*360/100));
+                      setGraphic(arcCell);
+                      setAlignment(Pos.CENTER);
+                      
+                  }
+                else {
+                  System.out.println("Empty row");
+                }
+              }
+            };
+          }
+        });
+         
+        
         monthCColumn.setCellValueFactory(new PropertyValueFactory("monthC")); //connect to the private variables in the table
         monthCColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         monthCColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableOwnResources, String>>() {
@@ -190,6 +257,21 @@ public class OwnResourcesController implements Initializable {
          removeButton.setTooltip(new Tooltip("Remove selected names"));  
          saveButton.setTooltip(new Tooltip ("Save"));
         
+         //TUPAK Demo Arc
+         arcContainer.setPrefSize(12, 12);
+         arcContainer.setMaxSize(12, 12);
+         arcContainer.setMinSize(12, 12);
+         //arc.setCenterX(5.0f);
+         //arc.setCenterY(5.0f);
+         //arc.setRadiusX(10.0f);
+         //arc.setRadiusY(10.0f);
+         //arc.setStartAngle(90.0f);
+         //arc.setLength(225.0f);
+         //arc.setType(ArcType.ROUND);
+         //arc.setStrokeType(StrokeType.OUTSIDE);
+         //arc.setStroke(Color.GREENYELLOW);
+         //arcContainer.getChildren().add(arc);
+         arc.setLength(-195);
         
     }
 

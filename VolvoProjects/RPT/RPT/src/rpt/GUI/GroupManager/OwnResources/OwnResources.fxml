@@ -11,9 +11,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Arc?>
 
-<BorderPane prefHeight="536.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.GroupManager.OwnResources.OwnResourcesController">
+<BorderPane prefHeight="536.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.GroupManager.OwnResources.OwnResourcesController">
    <top>
       <ToolBar maxWidth="1.7976931348623157E308" prefHeight="43.0" prefWidth="800.0" BorderPane.alignment="CENTER">
         <items>
@@ -77,6 +79,14 @@
                         <Insets left="10.0" top="5.0" />
                      </HBox.margin>
                   </Button>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="12.0" prefWidth="12.0" HBox.hgrow="NEVER">
+                     <children>
+                        <Arc fx:id="arc" centerX="5.0" centerY="5.0" fill="#1fff30" length="287.0" radiusX="10.0" radiusY="10.0" startAngle="90.0" stroke="BLACK" strokeType="OUTSIDE" type="ROUND" />
+                     </children>
+                     <HBox.margin>
+                        <Insets left="12.0" top="12.0" />
+                     </HBox.margin>
+                  </Pane>
                </children>
                <padding>
                   <Insets bottom="5.0" />
@@ -86,10 +96,10 @@
               <columns>
                 <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="134.0" text="Name" />
                   <TableColumn fx:id="resourcesTypeColumn" prefWidth="191.0" text="Resources type" />
-                  <TableColumn fx:id="monthAColumn" prefWidth="107.25576782226562" text="Month A" />
-                  <TableColumn fx:id="monthBColumn" prefWidth="98.90823364257812" text="Month B" />
-                  <TableColumn fx:id="monthCColumn" prefWidth="116.60336303710938" text="Month C" />
-                  <TableColumn fx:id="monthDColumn" prefWidth="152.20672607421875" text="Month D" />
+                  <TableColumn fx:id="monthAColumn" minWidth="60.0" prefWidth="-1.0" text="Month A" />
+                  <TableColumn fx:id="monthBColumn" minWidth="60.0" prefWidth="-1.0" text="Month B" />
+                  <TableColumn fx:id="monthCColumn" minWidth="60.0" prefWidth="-1.0" text="Month C" />
+                  <TableColumn fx:id="monthDColumn" minWidth="60.0" prefWidth="-1.0" text="Month D" />
               </columns>
             </TableView>
          </children>

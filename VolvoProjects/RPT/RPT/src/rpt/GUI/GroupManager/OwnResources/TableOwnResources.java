@@ -15,19 +15,20 @@ public class TableOwnResources {
    //initialize all variables in Table Views
     private String nameColumn;
     private String resourcesType;
-    private String monthA, monthB,monthC,monthD;  
+    private String monthA,monthC,monthD;  
+    private int monthB;
     
    //Constructor with no parameters
     public TableOwnResources(){
         this.nameColumn = "";
         this.resourcesType = "";
         this.monthA = "";
-        this.monthB = "";
+        this.monthB = 0;
         this.monthC = "";
         this.monthD ="";
     }
    //Constructor with parameters
-    public TableOwnResources(String nameColumn, String resourcesType, String monthA, String monthB, String monthC, String monthD) {
+    public TableOwnResources(String nameColumn, String resourcesType, String monthA, int monthB, String monthC, String monthD) {
         this.nameColumn = nameColumn;
         this.resourcesType = resourcesType;
         this.monthA = monthA;
@@ -61,11 +62,11 @@ public class TableOwnResources {
         this.monthA = monthA;
     }
 
-    public String getMonthB() {
+    public int getMonthB() {
         return monthB;
     }
 
-    public void setMonthB(String monthB) {
+    public void setMonthB(int monthB) {
         this.monthB = monthB;
     }
 
