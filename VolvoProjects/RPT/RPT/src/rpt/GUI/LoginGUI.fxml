@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane prefHeight="212.0" prefWidth="365.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.LoginController">
+<Pane prefHeight="212.0" prefWidth="365.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.LoginController">
    <children>
       <GridPane layoutX="37.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="102.0" prefWidth="273.0">
         <columnConstraints>
@@ -39,7 +39,7 @@
                   <Insets right="10.0" />
                </GridPane.margin>
             </TextField>
-            <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <PasswordField fx:id="passwordField" onKeyPressed="#handleEnterPressed" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>

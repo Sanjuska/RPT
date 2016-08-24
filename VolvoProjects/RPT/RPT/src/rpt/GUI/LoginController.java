@@ -18,7 +18,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import java.sql.*;
+import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import rpt.RPT;
 
 /**
@@ -34,10 +37,8 @@ public class LoginController implements Initializable {
             Label wrongLogin;
     @FXML
             private Button loginButton;
-    
-    @FXML
-    private void loginButton(ActionEvent event) throws IOException {
-       //Check user password
+    public void loginCheck () throws IOException{
+     //Check user password
        String password = "";
        try {
            Statement statement = RPT.conn.createStatement();
@@ -64,9 +65,21 @@ public class LoginController implements Initializable {
            cdsidField.clear();
            passwordField.clear();
            wrongLogin.setVisible(true);   
-        }
-           
+        }    
     }
+    
+    //Login button click
+    @FXML
+    private void loginButton(ActionEvent event) throws IOException{
+      loginCheck();
+    }
+    //Login by pressing ENTER
+    @FXML
+    public void handleEnterPressed(KeyEvent event) throws IOException{
+    if (event.getCode() == KeyCode.ENTER) {
+        loginCheck();
+    }
+}
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
