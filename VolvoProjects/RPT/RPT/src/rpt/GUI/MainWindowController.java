@@ -45,6 +45,9 @@ public class MainWindowController implements Initializable {
     
     
     //Icon for every branch (Manager group)
+     private final Node researchAndDevelopmentIcon= new ImageView(
+        new Image(getClass().getResourceAsStream("/Icons/manager.png"))
+    );
     private final Node programManagerIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))
     );
@@ -72,6 +75,7 @@ public class MainWindowController implements Initializable {
      
     //Declaration of branches
     TreeItem<String> root;
+    TreeItem <String> researchAndDevelopmentItem;
     TreeItem <String> programManagerItem;
     TreeItem <String> departmentManagerItem;
     TreeItem <String> sectionManagerItem;
@@ -84,6 +88,10 @@ public class MainWindowController implements Initializable {
      root = new TreeItem<>("Root");
      root.setExpanded(true);
      tree.setRoot(root);
+     
+     //R & D branch branch
+     researchAndDevelopmentItem= makeBranchTreeItem ("Research and Development", root,researchAndDevelopmentIcon);
+     makeBranchTreeItem ("Development Process", researchAndDevelopmentItem);
   
     //Program Manager branch
      programManagerItem= makeBranchTreeItem ("Program Manager", root,programManagerIcon);
@@ -98,7 +106,7 @@ public class MainWindowController implements Initializable {
      
       //Section branch
      sectionManagerItem= makeBranchTreeItem ("Section Manager", root,sectionManagerIcon);
-     makeBranchTreeItem ("xx", sectionManagerItem);
+     makeBranchTreeItem ("Deliveries", sectionManagerItem);
      makeBranchTreeItem ("xx", sectionManagerItem);
      
      //Group Manager branch
@@ -134,6 +142,16 @@ public class MainWindowController implements Initializable {
                  if (newValue != null)
                      System.out.println(newValue.getValue());
                  switch (newValue.getValue()){
+                      case "Development Process":
+                         System.out.println("Open Development Process:");
+                         try {
+                             //load new view in main view pane 
+                             viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/ResearchAndDevelopment/DevelopmentProcess/DevelopmentProcess.fxml")));
+                         } catch (IOException e) {
+                             e.printStackTrace();
+                         }
+                         //contentPane.autosize();
+                         break;
                       case "Own resources":
                          System.out.println("Open Own resources:");
                          try {
