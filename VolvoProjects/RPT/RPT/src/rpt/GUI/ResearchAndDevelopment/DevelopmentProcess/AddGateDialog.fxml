@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.AddGateDialogController">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="228.0" prefWidth="322.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.AddGateDialogController">
    <content>
-      <GridPane prefHeight="374.0" prefWidth="629.0">
+      <GridPane prefHeight="421.0" prefWidth="309.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="274.0" minWidth="10.0" prefWidth="270.0" />
         </columnConstraints>

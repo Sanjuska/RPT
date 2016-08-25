@@ -39,11 +39,10 @@ import rpt.GUI.ProgramManager.TableVariants;
  * @author colak
  */
 public class DevelopmentProcessController implements Initializable {
-    
     @FXML
     public TableView<TableDevelopmentProcess> tableGates;
     
-    @FXML
+    @FXML    
     public TableColumn<TableDevelopmentProcess, String> gateColumn;
     
     @FXML
@@ -53,25 +52,25 @@ public class DevelopmentProcessController implements Initializable {
     public TableColumn<TableDevelopmentProcess, String> descriptionColumn;
     
     @FXML
-            Button addGateButton;
+    Button addGateButton;
     
     @FXML
-            Button removeGateButton;
+    Button removeGateButton;
     
     @FXML
-            Button editGateButton;
+    Button editGateButton;
     
     @FXML
-            Button deleteProcessButton;
+    Button deleteProcessButton;
     
     @FXML
-            Button addProcessButton;
+    Button addProcessButton;
     
     @FXML
-            ComboBox processComboBox;
+    ComboBox processComboBox;
     
     @FXML
-            Separator separator;
+    Separator separator;
     
     
     //Create table's data, get all of the items
@@ -88,7 +87,7 @@ public class DevelopmentProcessController implements Initializable {
     public static void add(TableDevelopmentProcess entry) {
         data.add(entry);
     }
-    @FXML
+    //Click addGate button
     public void addGateButtonClicked(ActionEvent event) throws IOException {
         Stage stage;
         Parent root;
@@ -102,8 +101,6 @@ public class DevelopmentProcessController implements Initializable {
             stage.initOwner(addGateButton.getScene().getWindow());
             stage.showAndWait();
         }
-        
-        
     }
     //Give the function to remove button
     public void removeGateButtonClicked (){
@@ -113,6 +110,56 @@ public class DevelopmentProcessController implements Initializable {
         tableGates.getItems().removeAll(removeGates);
     }
     
+   //Combo box toolbar
+    
+   // ObservableList object enables the tracking of any changes to its elements
+    private static ObservableList<String> comboData = FXCollections.observableArrayList("CP2015A");
+  
+    //Make it possible to get all contents of comboData
+    public static ObservableList<String> getComboData(){
+        return comboData;
+    }
+       //Click to add process 
+        public void addProcessButtonPressed(ActionEvent event) throws IOException{
+            System.out.println("Add procces button");
+            Stage stage;
+            Parent root;
+        if (event.getSource() == addProcessButton) {
+            //Open the PopUp window with implementation fields
+            stage = new Stage();
+            root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ResearchAndDevelopment/DevelopmentProcess/AddProcessDialog.fxml"));
+            stage.setScene(new Scene(root));
+            AddProcessDialogController.connect(this);
+            stage.setTitle("Add process");
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(addProcessButton.getScene().getWindow());
+            stage.showAndWait();
+        }
+        
+        }
+        //Give the function to remove button
+        public void deleteProcessButtonPressed (){
+            Object processToRemove = processComboBox.getSelectionModel().getSelectedItem();
+            processComboBox.getItems().removeAll(processToRemove);
+        }
+        //Add entry into table
+        public static void addCombo(String entry) {
+            comboData.add(entry);
+        }
+        
+        //Switch process
+        public void showSelectedProcess(String comboEntry){
+          processComboBox.getSelectionModel().select(comboEntry);
+          
+          //TODO
+          //Clear current gates shown
+          //Read new gate data from database for selected process
+        }
+  
+
+        
+ 
     /**
      * Initializes the controller class.
      */
@@ -159,19 +206,26 @@ public class DevelopmentProcessController implements Initializable {
             }
         });
         
+     
+        
+        
         //Push into the table
         tableGates.setItems(data);
+        
+        //Push into combo box
+        processComboBox.setItems(comboData);
+
         
         //Tooltips
         addGateButton.setTooltip(new Tooltip("Add new gate"));
         removeGateButton.setTooltip(new Tooltip("Remove selected gates"));
         editGateButton.setTooltip((new Tooltip("Edit gate")));
-        addProcessButton.setTooltip((new Tooltip("Add new project")));
+        addProcessButton.setTooltip((new Tooltip("Add new process")));
         processComboBox.setTooltip(new Tooltip("Select process"));
         deleteProcessButton.setTooltip(new Tooltip("Delete process"));
         
-        //Separator preferences
-        
-    }
     
+    }
 }
+     
+

@@ -15,6 +15,11 @@ public class TableDevelopmentProcess {
     private String gateColumnString;
     private int weeksColumnInteger;
     private String descriptionColumnString;
+    private String processComboBox;
+
+    public TableDevelopmentProcess(String processComboBox) {
+        this.processComboBox = processComboBox;
+    }
     
     //Empty constructor
      public TableDevelopmentProcess() {
@@ -54,6 +59,12 @@ public class TableDevelopmentProcess {
     public void setWeeksColumnInteger(int weeksColumnInteger) {
         this.weeksColumnInteger = weeksColumnInteger;
     }
-    
+     public String getProcessComboBox() {
+        return processComboBox;
+    }
+
+    public void setProcessComboBox(String processComboBox) {
+        this.processComboBox = processComboBox;
+    }
 }
 

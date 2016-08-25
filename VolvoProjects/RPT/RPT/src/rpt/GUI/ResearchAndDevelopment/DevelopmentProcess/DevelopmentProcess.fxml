@@ -12,67 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.DevelopmentProcessController">
-   <top>
-      <HBox maxWidth="1.7976931348623157E308">
-         <children>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="605.0">
-               <children>
-                  <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="39.0" prefWidth="609.0" HBox.hgrow="ALWAYS">
-                    <items>
-                        <Button fx:id="addGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addGateButtonClicked" text="Add">
-                           <graphic>
-                              <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../Icons/addIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="removeGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeGateButtonClicked" text="Remove">
-                           <graphic>
-                              <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../Icons/removeIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="editGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Edit">
-                           <graphic>
-                              <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../Icons/editIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Separator mouseTransparent="true" orientation="VERTICAL" prefHeight="0.0" prefWidth="4.0" />
-                        <ComboBox fx:id="processComboBox" promptText="Process" />
-                        <Button fx:id="addProcessButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Add">
-                           <graphic>
-                              <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../Icons/addProcessIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="deleteProcessButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Remove">
-                           <graphic>
-                              <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../Icons/deleteProcessIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                    </items>
-                  </ToolBar>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-   </top>
    <center>
       <TableView fx:id="tableGates" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
@@ -82,4 +21,61 @@
         </columns>
       </TableView>
    </center>
+   <top>
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="605.0" BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="39.0" prefWidth="609.0" HBox.hgrow="ALWAYS">
+              <items>
+                  <Button fx:id="addGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addGateButtonClicked" text="Add">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/addIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="removeGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeGateButtonClicked" text="Remove">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/removeIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="editGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Edit">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/editIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Separator mouseTransparent="true" orientation="VERTICAL" prefHeight="0.0" prefWidth="4.0" />
+                  <ComboBox fx:id="processComboBox" promptText="Process" />
+                  <Button fx:id="addProcessButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addProcessButtonPressed" text="Add">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/addProcessIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="deleteProcessButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#deleteProcessButtonPressed" text="Remove">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/deleteProcessIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+              </items>
+            </ToolBar>
+         </children>
+      </HBox>
+   </top>
 </BorderPane>

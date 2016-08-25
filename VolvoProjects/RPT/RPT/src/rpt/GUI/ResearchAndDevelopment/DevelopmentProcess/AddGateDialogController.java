@@ -27,18 +27,21 @@ import javafx.stage.Stage;
 public class AddGateDialogController implements Initializable {
     
     @FXML
-            TextField gateTextField;
+    TextField gateTextField;
+    
     @FXML
-            TextField weeksTextField;
+    TextField weeksTextField;
+    
     @FXML
-            TextField descriptionTextField;
+    TextField descriptionTextField;
   
     @FXML
-            Button addButton;
-    @FXML
-            Button doneButton;
+    Button addButton;
     
-    private Stage dialogStage;
+    @FXML
+    Button doneButton;
+    
+  
     /**
      * Initializes the controller class.
      */
