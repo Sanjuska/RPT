@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.SectionManager.Deliveries.DeliveriesController">
+   <top>
+      <VBox prefHeight="107.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar prefHeight="40.0" prefWidth="600.0">
+              <items>
+                <Button fx:id="addButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#adduttonClicked" text="Add">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/addIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="removeButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeButtonClicked" text="Remove">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/removeIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="editButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Edit">
+                     <graphic>
+                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Icons/editIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+              </items>
+            </ToolBar>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Process:" wrappingWidth="77.20068359375">
+                           <HBox.margin>
+                              <Insets left="5.0" right="40.0" top="10.0" />
+                           </HBox.margin>
+                        </Text>
+                        <ComboBox fx:id="processBox" prefWidth="150.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Gate:" wrappingWidth="57.88720703125">
+                           <HBox.margin>
+                              <Insets left="5.0" right="60.0" top="10.0" />
+                           </HBox.margin>
+                        </Text>
+                        <ComboBox fx:id="gateBox" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <TableView fx:id="tableDeliveries" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="deliveryColumn" prefWidth="114.0" text="Delivery" />
+          <TableColumn fx:id="descriptionColumn" prefWidth="141.0" text="Description" />
+        </columns>
+         <BorderPane.margin>
+            <Insets top="10.0" />
+         </BorderPane.margin>
+      </TableView>
+   </center>
+</BorderPane>

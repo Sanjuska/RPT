@@ -180,6 +180,16 @@ public class MainWindowController implements Initializable {
                              e.printStackTrace();
                          }
                          break;
+                         case "Deliveries":
+                         System.out.println("Open Deliveries:");
+                         try {
+                             //load new view in main view pane   
+                             viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/SectionManager/Deliveries/Deliveries.fxml")));
+                         } catch (IOException e) {
+                             e.printStackTrace();
+                         }
+                         break;
+                     
                      
                  }
              });

@@ -174,7 +174,8 @@ public class DevelopmentProcessController implements Initializable {
         gateColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableDevelopmentProcess, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<TableDevelopmentProcess, String> event) {
-                ((TableDevelopmentProcess) event.getTableView().getItems().get(event.getTablePosition().getRow())).setGateColumnString(event.getNewValue());
+                ((TableDevelopmentProcess) event.getTableView().getItems().
+                        get(event.getTablePosition().getRow())).setGateColumnString(event.getNewValue());
             }
         });
         
@@ -193,7 +194,8 @@ public class DevelopmentProcessController implements Initializable {
         weeksColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableDevelopmentProcess, Integer>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<TableDevelopmentProcess, Integer> event) {
-                ((TableDevelopmentProcess) event.getTableView().getItems().get(event.getTablePosition().getRow())).setWeeksColumnInteger(event.getNewValue());
+                ((TableDevelopmentProcess) event.getTableView().getItems().
+                        get(event.getTablePosition().getRow())).setWeeksColumnInteger(event.getNewValue());
             }
         });
         
@@ -202,7 +204,8 @@ public class DevelopmentProcessController implements Initializable {
         descriptionColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableDevelopmentProcess, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<TableDevelopmentProcess, String> event) {
-                ((TableDevelopmentProcess) event.getTableView().getItems().get(event.getTablePosition().getRow())).setDescriptionColumnString(event.getNewValue());
+                ((TableDevelopmentProcess) event.getTableView().getItems().
+                        get(event.getTablePosition().getRow())).setDescriptionColumnString(event.getNewValue());
             }
         });
         
