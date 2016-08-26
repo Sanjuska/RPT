@@ -270,9 +270,17 @@ public class Variant {
     
     public void setValue(String dataField, Object input){
         switch(dataField){
-            case "Engine Name":
+            case "Engine name":
                 setEngineName((String) input);
                 break;
+            case "Denomination":
+                setDenomination((String) input);
+                break;
+            case "Gearbox":
+                setGearbox ((String) input);
+                break;
+            case "Emiss":
+                setEmiss ((String) input);
             default:
                 break;
         }
