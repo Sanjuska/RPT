@@ -17,7 +17,8 @@
         <columns>
           <TableColumn fx:id="gateColumn" prefWidth="140.0" text="Gate" />
           <TableColumn fx:id="weeksColumn" prefWidth="93.0" text="Weeks " />
-            <TableColumn fx:id="descriptionColumn" prefWidth="161.0" text="Description" />
+            <TableColumn fx:id="beforeColumn" prefWidth="107.0" text="Before" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="129.0" text="Description" />
         </columns>
       </TableView>
    </center>

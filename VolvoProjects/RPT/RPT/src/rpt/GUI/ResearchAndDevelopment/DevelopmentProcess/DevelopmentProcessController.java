@@ -8,10 +8,16 @@ package rpt.GUI.ResearchAndDevelopment.DevelopmentProcess;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,16 +25,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
+import javafx.util.converter.DefaultStringConverter;
 import rpt.GUI.GroupManager.OwnResources.TableOwnResources;
 import rpt.GUI.GroupManager.Roles.TableRoles;
 import rpt.GUI.ProgramManager.TableVariants;
@@ -47,6 +62,9 @@ public class DevelopmentProcessController implements Initializable {
     
     @FXML
     public TableColumn<TableDevelopmentProcess, Integer>  weeksColumn;
+    
+    @FXML
+    public TableColumn<TableDevelopmentProcess, ComboBox>  beforeColumn;
     
     @FXML
     public TableColumn<TableDevelopmentProcess, String> descriptionColumn;
@@ -68,20 +86,19 @@ public class DevelopmentProcessController implements Initializable {
     
     @FXML
     ComboBox processComboBox;
-    
-    @FXML
-    Separator separator;
-    
-    
+        
+     // ObservableList object enables the tracking of any changes to its elements
+    private static ObservableList<ComboBox> comboBoxData = FXCollections.observableArrayList("text1", "text2", "text3");
+    private static ObservableList<TableDevelopmentProcess> data =
+        FXCollections.observableArrayList(
+                    new TableDevelopmentProcess ("Hund", 2, "fdf")    
+                    );
+   
+     
     //Create table's data, get all of the items
     public static ObservableList<TableDevelopmentProcess> getDevelopmentProcesses(){
         return data;
     }
-    
-    // ObservableList object enables the tracking of any changes to its elements
-    private static ObservableList<TableDevelopmentProcess> data =
-            FXCollections.observableArrayList(new TableDevelopmentProcess("FC204", 3, "BlBlabla")
-            );
     
     //Add entry into table
     public static void add(TableDevelopmentProcess entry) {
@@ -167,6 +184,7 @@ public class DevelopmentProcessController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //Table is editable
         tableGates.setEditable(true);
+     
         
         //specify a cell factory  and enable it editable
         gateColumn.setCellValueFactory(new PropertyValueFactory<>("gateColumnString"));
@@ -179,7 +197,7 @@ public class DevelopmentProcessController implements Initializable {
             }
         });
         
-        weeksColumn.setCellValueFactory(new PropertyValueFactory<TableDevelopmentProcess,Integer>("weeksColumnInteger"));
+        weeksColumn.setCellValueFactory(new PropertyValueFactory<>("weeksColumnInteger"));
         weeksColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Integer>(){
             @Override
             public String toString(Integer object) {
@@ -198,6 +216,10 @@ public class DevelopmentProcessController implements Initializable {
                         get(event.getTablePosition().getRow())).setWeeksColumnInteger(event.getNewValue());
             }
         });
+        
+        beforeColumn.setCellValueFactory(new PropertyValueFactory<>("beforeColumnComboBox"));
+        beforeColumn.setCellFactory((ComboBoxTableCell.forTableColumn(comboBoxData)));
+
         
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("descriptionColumnString"));
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -229,6 +251,8 @@ public class DevelopmentProcessController implements Initializable {
         
     
     }
+
+   
 }
      
 
