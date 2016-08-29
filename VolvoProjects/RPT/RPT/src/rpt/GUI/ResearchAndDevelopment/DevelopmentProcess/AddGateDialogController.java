@@ -51,15 +51,15 @@ public class AddGateDialogController implements Initializable {
     }
      //add item into table
     public void add(){
+            
           //create entry for the table
-//        TableDevelopmentProcess entry = new TableDevelopmentProcess();
-//        entry.setGateColumnString(gateTextField.getText());
-//        entry.setWeeksColumnInteger(Integer.parseInt(weeksTextField.getText()));
-//        entry.setBeforeColumnObservableList(beforeColumnObservableList.get);
-//        entry.setDescriptionColumnString(descriptionTextField.getText());
+    TableDevelopmentProcess entry = new TableDevelopmentProcess();
+     entry.setGateColumnString(gateTextField.getText());
+      entry.setWeeksColumnInteger(Integer.parseInt(weeksTextField.getText()));
+      entry.setDescriptionColumnString(descriptionTextField.getText());
 //        
        //insert data in the table
-      // DevelopmentProcessController.add(entry);
+       DevelopmentProcessController.add(entry);
        //clear the entry form
         clearForm();
     }

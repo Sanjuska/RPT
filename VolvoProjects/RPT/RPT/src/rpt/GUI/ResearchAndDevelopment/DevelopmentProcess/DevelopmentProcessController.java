@@ -27,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TableCell;
@@ -38,7 +39,9 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
+import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -64,7 +67,7 @@ public class DevelopmentProcessController implements Initializable {
     public TableColumn<TableDevelopmentProcess, Integer>  weeksColumn;
     
     @FXML
-    public TableColumn<TableDevelopmentProcess, ComboBox>  beforeColumn;
+    public TableColumn<TableDevelopmentProcess, String>  beforeColumn;
     
     @FXML
     public TableColumn<TableDevelopmentProcess, String> descriptionColumn;
@@ -86,12 +89,15 @@ public class DevelopmentProcessController implements Initializable {
     
     @FXML
     ComboBox processComboBox;
+    
+   ComboBox<String> beforeCellComboBox = new ComboBox<String>();
+   
+   private static ObservableList<String> list = FXCollections.observableArrayList("SOP");
         
      // ObservableList object enables the tracking of any changes to its elements
-    private static ObservableList<ComboBox> comboBoxData = FXCollections.observableArrayList("text1", "text2", "text3");
     private static ObservableList<TableDevelopmentProcess> data =
         FXCollections.observableArrayList(
-                    new TableDevelopmentProcess ("Hund", 2, "fdf")    
+                    new TableDevelopmentProcess ("Hund", 2,"fdg", "fdf")    
                     );
    
      
@@ -102,6 +108,7 @@ public class DevelopmentProcessController implements Initializable {
     
     //Add entry into table
     public static void add(TableDevelopmentProcess entry) {
+        list.add(entry.getGateColumnString());
         data.add(entry);
     }
     //Click addGate button
@@ -218,8 +225,14 @@ public class DevelopmentProcessController implements Initializable {
         });
         
         beforeColumn.setCellValueFactory(new PropertyValueFactory<>("beforeColumnComboBox"));
-        beforeColumn.setCellFactory((ComboBoxTableCell.forTableColumn(comboBoxData)));
-
+        beforeColumn.setCellFactory((ComboBoxTableCell.forTableColumn(list)));
+        beforeColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableDevelopmentProcess, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<TableDevelopmentProcess, String> event) {
+                ((TableDevelopmentProcess) event.getTableView().getItems().
+                        get(event.getTablePosition().getRow())).setBeforeColumnComboBox(event.getNewValue());
+            }
+        });
         
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("descriptionColumnString"));
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -237,6 +250,7 @@ public class DevelopmentProcessController implements Initializable {
         //Push into the table
         tableGates.setItems(data);
         
+               
         //Push into combo box
         processComboBox.setItems(comboData);
 

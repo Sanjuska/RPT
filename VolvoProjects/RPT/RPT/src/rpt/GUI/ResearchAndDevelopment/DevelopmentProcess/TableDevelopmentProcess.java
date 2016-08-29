@@ -20,7 +20,7 @@ public class TableDevelopmentProcess {
     //variables
     private String gateColumnString;
     private Integer weeksColumnInteger;
-    private ComboBox<String> beforeColumnComboBox;
+    private String beforeColumnComboBox;
     private String descriptionColumnString;
 
     public String getGateColumnString() {
@@ -39,11 +39,11 @@ public class TableDevelopmentProcess {
         this.weeksColumnInteger = weeksColumnInteger;
     }
 
-    public ComboBox<String> getBeforeColumnComboBox() {
+    public String getBeforeColumnComboBox() {
         return beforeColumnComboBox;
     }
 
-    public void setBeforeColumnComboBox(ComboBox<String> beforeColumnComboBox) {
+    public void setBeforeColumnComboBox(String beforeColumnComboBox) {
         this.beforeColumnComboBox = beforeColumnComboBox;
     }
 
@@ -54,17 +54,17 @@ public class TableDevelopmentProcess {
     public void setDescriptionColumnString(String descriptionColumnString) {
         this.descriptionColumnString = descriptionColumnString;
     }
+
+  
     
-    
-    
-////   // Empty constructor
-//     public TableDevelopmentProcess() {
-//         this.gateColumnString = "";
-//         this.weeksColumnInteger = 0;
-//         this.beforeColumnObservableList= "";
-//         this.descriptionColumnString ="";
-//        
-//    }
+//   // Empty constructor
+     public TableDevelopmentProcess() {
+         this.gateColumnString = "";
+         this.weeksColumnInteger = 0;
+         this.beforeColumnComboBox= "";
+         this.descriptionColumnString ="";
+        
+    }
 //    
 //    //Constructor with parameters
 //    public TableDevelopmentProcess(String gateColumnString, int weeksColumnInteger, 
@@ -109,11 +109,14 @@ public class TableDevelopmentProcess {
 //    }
 //   
 
-    public TableDevelopmentProcess(String gateColumnString, Integer weeksColumnInteger, String descriptionColumnString) {
+    public TableDevelopmentProcess(String gateColumnString, Integer weeksColumnInteger, String beforeColumnComboBox, String descriptionColumnString) {
         this.gateColumnString = gateColumnString;
         this.weeksColumnInteger = weeksColumnInteger;
+        this.beforeColumnComboBox = beforeColumnComboBox;
         this.descriptionColumnString = descriptionColumnString;
     }
+
+    
 
 
 }
