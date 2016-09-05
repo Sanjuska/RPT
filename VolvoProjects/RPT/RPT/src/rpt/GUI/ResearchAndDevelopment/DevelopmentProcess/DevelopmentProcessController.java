@@ -41,6 +41,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -126,6 +127,10 @@ public class DevelopmentProcessController implements Initializable {
             stage.showAndWait();
         }
     }
+    
+    
+    
+    
     //Give the function to remove button
     public void removeGateButtonClicked (){
         ObservableList<TableDevelopmentProcess> removeGates;
@@ -191,6 +196,8 @@ public class DevelopmentProcessController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //Table is editable
         tableGates.setEditable(true);
+        tableGates.setFixedCellSize(Region.USE_COMPUTED_SIZE);
+        
      
         
         //specify a cell factory  and enable it editable
@@ -243,6 +250,7 @@ public class DevelopmentProcessController implements Initializable {
                         get(event.getTablePosition().getRow())).setDescriptionColumnString(event.getNewValue());
             }
         });
+        
         
      
         
