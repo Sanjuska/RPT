@@ -6,7 +6,7 @@
 package rpt.GUI.SectionManager.Deliveries;
 
 import rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.*;
-import rpt.GUI.ProgramManager.*;
+import rpt.GUI.ProgramStrategist.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;

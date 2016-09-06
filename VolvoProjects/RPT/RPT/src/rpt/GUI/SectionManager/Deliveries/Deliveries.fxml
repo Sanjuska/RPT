@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.SectionManager.Deliveries.DeliveriesController">
+<BorderPane maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.SectionManager.Deliveries.DeliveriesController">
    <top>
       <VBox prefHeight="107.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -57,7 +57,7 @@
                               <Insets left="5.0" right="40.0" top="10.0" />
                            </HBox.margin>
                         </Text>
-                        <ComboBox fx:id="processBox" prefWidth="150.0" />
+                        <ComboBox fx:id="processBox" onAction="#processSelected" prefWidth="150.0" />
                      </children>
                      <VBox.margin>
                         <Insets top="5.0" />
@@ -70,7 +70,7 @@
                               <Insets left="5.0" right="60.0" top="10.0" />
                            </HBox.margin>
                         </Text>
-                        <ComboBox fx:id="gateBox" prefWidth="150.0">
+                        <ComboBox fx:id="gateBox" onAction="#gateSelected" prefWidth="150.0">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>

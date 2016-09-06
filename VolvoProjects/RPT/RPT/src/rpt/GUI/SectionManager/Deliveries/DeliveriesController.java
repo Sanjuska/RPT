@@ -7,6 +7,8 @@ package rpt.GUI.SectionManager.Deliveries;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.DevelopmentProcessController;
 import rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.TableDevelopmentProcess;
 
 /**
@@ -94,11 +97,18 @@ public class DeliveriesController implements Initializable {
         tableDeliveries.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         removeDeliveries = tableDeliveries.getSelectionModel().getSelectedItems();
         tableDeliveries.getItems().removeAll(removeDeliveries);
+    }   
+    
+    //
+    public void processSelected (){
+        String process = processBox.getSelectionModel().getSelectedItem().toString();
+        gateBox.setItems(DevelopmentProcessController.getGateList(process));
     }
     
-    
-    
-    
+    //Gate has been selected in the drop down menu
+    public void gateSelected (){
+        
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -129,6 +139,8 @@ public class DeliveriesController implements Initializable {
         
         //Push into the table
         tableDeliveries.setItems(data);
+        
+        processBox.setItems(DevelopmentProcessController.getProcessList());
         
     }
     
