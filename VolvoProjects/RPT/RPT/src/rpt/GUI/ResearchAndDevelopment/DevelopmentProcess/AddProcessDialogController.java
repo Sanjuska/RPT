@@ -51,7 +51,7 @@ public class AddProcessDialogController implements Initializable {
             parent.addCombo(comboEntry);
             //clear the entry form
             clearForm();
-            parent.showSelectedProcess(comboEntry);
+            //parent.showSelectedProcess(comboEntry);
         }
         //Add button clicked with the mouse
         public void addItem(ActionEvent event){

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.DevelopmentProcessController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.ResearchAndDevelopment.DevelopmentProcess.DevelopmentProcessController">
    <center>
       <TableView fx:id="tableGates" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
@@ -55,7 +55,7 @@
                      </graphic>
                   </Button>
                   <Separator mouseTransparent="true" orientation="VERTICAL" prefHeight="0.0" prefWidth="4.0" />
-                  <ComboBox fx:id="processComboBox" promptText="Process" />
+                  <ComboBox fx:id="processComboBox" onAction="#processSelected" promptText="Process" />
                   <Button fx:id="addProcessButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addProcessButtonPressed" text="Add">
                      <graphic>
                         <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">

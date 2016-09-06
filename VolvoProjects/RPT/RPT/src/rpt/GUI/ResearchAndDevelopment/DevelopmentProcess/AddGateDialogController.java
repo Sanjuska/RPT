@@ -5,12 +5,9 @@
 */
 package rpt.GUI.ResearchAndDevelopment.DevelopmentProcess;
 
-import rpt.GUI.ProgramManager.*;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -49,15 +46,15 @@ public class AddGateDialogController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
     }
-     //add item into table
+     //add gate into table
     public void add(){
             
-          //create entry for the table
-    TableDevelopmentProcess entry = new TableDevelopmentProcess();
-     entry.setGateColumnString(gateTextField.getText());
-      entry.setWeeksColumnInteger(Integer.parseInt(weeksTextField.getText()));
-      entry.setDescriptionColumnString(descriptionTextField.getText());
-//        
+        //create entry for the table
+        TableDevelopmentProcess entry = new TableDevelopmentProcess();
+        entry.setGateColumnString(gateTextField.getText());
+        entry.setWeeksColumnInteger(Integer.parseInt(weeksTextField.getText()));
+        entry.setDescriptionColumnString(descriptionTextField.getText());
+        
        //insert data in the table
        DevelopmentProcessController.add(entry);
        //clear the entry form
