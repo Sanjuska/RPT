@@ -48,7 +48,7 @@ public class MainWindowController implements Initializable {
      private final Node researchAndDevelopmentIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))
     );
-    private final Node programManagerIcon= new ImageView(
+    private final Node programStrategistIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))
     );
     private final Node departmentManagerIcon= new ImageView(
@@ -60,13 +60,28 @@ public class MainWindowController implements Initializable {
     private final Node groupManagerIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))
     );
+    private final Node uplCalibrationManagerIcon= new ImageView(
+        new Image(getClass().getResourceAsStream("/Icons/manager.png"))
+    );
     private final Node splCalibrationManagerIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))
     );
-    private final Node clCalibrationManagerIcon= new ImageView(
+    private final Node kaswIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))
     );
-     private final Node funkOptManagerIcon= new ImageView(
+    private final Node swtlIcon= new ImageView(
+        new Image(getClass().getResourceAsStream("/Icons/manager.png"))
+    );
+    private final Node calibrationLeaderIcon= new ImageView(
+        new Image(getClass().getResourceAsStream("/Icons/manager.png"))
+    );
+    private final Node calibrationEngineerIcon= new ImageView(
+        new Image(getClass().getResourceAsStream("/Icons/manager.png"))
+    );
+    private final Node emsTechnicianIcon= new ImageView(
+        new Image(getClass().getResourceAsStream("/Icons/manager.png"))
+    );
+    private final Node meIcon= new ImageView(
         new Image(getClass().getResourceAsStream("/Icons/manager.png"))
     );
     
@@ -83,6 +98,7 @@ public class MainWindowController implements Initializable {
     TreeItem <String> splCalibrationManagerItem;
     TreeItem <String>clCalibrationManagerItem;
     TreeItem <String>funkOptManagerItem;
+    TreeItem <String>meItem;
     
      //Root  
      root = new TreeItem<>("Root");
@@ -94,20 +110,20 @@ public class MainWindowController implements Initializable {
      makeBranchTreeItem ("Development Process", researchAndDevelopmentItem);
   
     //Program Manager branch
-     programManagerItem= makeBranchTreeItem ("Program Manager", root,programManagerIcon);
+     programManagerItem= makeBranchTreeItem ("Program Strategist", root,programStrategistIcon);
      makeBranchTreeItem ("Projects", programManagerItem);
-     makeBranchTreeItem ("Variants", programManagerItem);
-  
+     makeBranchTreeItem ("Cycle Plans", programManagerItem);
      
      //Department branch
      departmentManagerItem= makeBranchTreeItem ("Department Manager", root,departmentManagerIcon);
-     makeBranchTreeItem ("xx", departmentManagerItem);
-     makeBranchTreeItem ("xx", departmentManagerItem);
+     makeBranchTreeItem ("Calculations", departmentManagerItem);
+     makeBranchTreeItem ("Section status", departmentManagerItem);
      
-      //Section branch
+     //Section branch
      sectionManagerItem= makeBranchTreeItem ("Section Manager", root,sectionManagerIcon);
      makeBranchTreeItem ("Deliveries", sectionManagerItem);
-     makeBranchTreeItem ("xx", sectionManagerItem);
+     makeBranchTreeItem ("Calculations", sectionManagerItem);
+     makeBranchTreeItem ("Group status", sectionManagerItem);
      
      //Group Manager branch
      groupManagerItem= makeBranchTreeItem ("Group Manager", root, groupManagerIcon);
@@ -115,23 +131,52 @@ public class MainWindowController implements Initializable {
      makeBranchTreeItem ("Roles", groupManagerItem);
      makeBranchTreeItem ("Roles allocation", groupManagerItem);
      makeBranchTreeItem ("Resources allocation", groupManagerItem);
-     makeBranchTreeItem ("Resources overview", groupManagerItem);
      
-      //SPL Calibration Manager branch
-     splCalibrationManagerItem= makeBranchTreeItem ("SPL Calibration Manager", root, splCalibrationManagerIcon);
+     //UPL Calibration Manager branch
+     splCalibrationManagerItem= makeBranchTreeItem ("Unit Program Leader (UPL)", root, uplCalibrationManagerIcon);
+     makeBranchTreeItem ("Project information", splCalibrationManagerItem);
+     makeBranchTreeItem ("UPL Plan", splCalibrationManagerItem);
+     makeBranchTreeItem ("Project status", splCalibrationManagerItem);
+     
+     //SPL Calibration Manager branch
+     splCalibrationManagerItem= makeBranchTreeItem ("System Program Leader (SPL)", root, splCalibrationManagerIcon);
      makeBranchTreeItem ("Project information", splCalibrationManagerItem);
      makeBranchTreeItem ("Team overview", splCalibrationManagerItem);
      makeBranchTreeItem ("SPL Plan", splCalibrationManagerItem);
      makeBranchTreeItem ("Project status", splCalibrationManagerItem);
     
+     //KASW Calibration Manager branch
+     splCalibrationManagerItem= makeBranchTreeItem ("KASW", root, kaswIcon);
+     makeBranchTreeItem ("Project information", splCalibrationManagerItem);
+     makeBranchTreeItem ("KASW Plan", splCalibrationManagerItem);
+     
+     //SWTL Calibration Manager branch
+     splCalibrationManagerItem= makeBranchTreeItem ("SWTL", root, swtlIcon);
+     makeBranchTreeItem ("Project information", splCalibrationManagerItem);
+     makeBranchTreeItem ("Team overview", splCalibrationManagerItem);
+     makeBranchTreeItem ("SWTL Plan", splCalibrationManagerItem);
+     
      //CL Calibration Manager branch
-     clCalibrationManagerItem= makeBranchTreeItem ("CL Calibration Manager", root, clCalibrationManagerIcon);
-     makeBranchTreeItem ("xx", clCalibrationManagerItem);
-     makeBranchTreeItem ("xx", clCalibrationManagerItem);
+     clCalibrationManagerItem= makeBranchTreeItem ("Calibration Leader (CL)", root, calibrationLeaderIcon);
+     makeBranchTreeItem ("Project Information", clCalibrationManagerItem);
+     makeBranchTreeItem ("Team Overview", clCalibrationManagerItem);
+     makeBranchTreeItem ("CL Plan", clCalibrationManagerItem);
+     makeBranchTreeItem ("Resources", clCalibrationManagerItem);
   
      //Funk Opt Manager branch
-     funkOptManagerItem = makeBranchTreeItem("Funk OPT Manager", root, funkOptManagerIcon);
-     makeBranchTreeItem("xx", funkOptManagerItem);
+     funkOptManagerItem = makeBranchTreeItem("Calibration Engineer", root, calibrationEngineerIcon);
+     makeBranchTreeItem("Project Activities", funkOptManagerItem);
+     
+     //Funk Opt Manager branch
+     funkOptManagerItem = makeBranchTreeItem("EMS Technician", root, emsTechnicianIcon);
+     makeBranchTreeItem("Rig plans", funkOptManagerItem);
+     
+     //Funk Opt Manager branch
+     funkOptManagerItem = makeBranchTreeItem("Me", root, meIcon);
+     makeBranchTreeItem("Late", funkOptManagerItem);
+     makeBranchTreeItem("Upcoming", funkOptManagerItem);
+     makeBranchTreeItem("Done", funkOptManagerItem);
+     makeBranchTreeItem("Project Information", funkOptManagerItem);
     
      //Create tree
      //tree = new TreeView<String>(root);
@@ -171,8 +216,8 @@ public class MainWindowController implements Initializable {
                              e.printStackTrace();
                          }
                          break;
-                     case "Variants":
-                         System.out.println("Open Variants:");
+                     case "Cycle Plans":
+                         System.out.println("Open Cycle Plans:");
                          try {
                              //load new view in main view pane   
                              viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/Variants.fxml")));
