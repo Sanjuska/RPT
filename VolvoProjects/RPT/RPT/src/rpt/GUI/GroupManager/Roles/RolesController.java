@@ -5,7 +5,6 @@
  */
 package rpt.GUI.GroupManager.Roles;
 
-import rpt.GUI.GroupManager.Roles.TableRoles;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,10 +24,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import rpt.GUI.ProgramManager.TableVariants;
 
 /**
  * FXML Controller class
