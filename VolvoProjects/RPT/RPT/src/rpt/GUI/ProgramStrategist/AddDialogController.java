@@ -3,9 +3,8 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package rpt.GUI.GroupManager.Roles;
+package rpt.GUI.ProgramStrategist;
 
-import rpt.GUI.ProgramStrategist.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -27,7 +26,15 @@ import javafx.stage.Stage;
 public class AddDialogController implements Initializable {
     
     @FXML
-            TextField rolesTextField;
+            TextField variantIField;
+    @FXML
+            TextField engineNameField;
+    @FXML
+            TextField denominationField;
+    @FXML
+            TextField gearboxField;
+    @FXML
+            TextField emissionsCategoryField;
     @FXML
             Button addButton;
     @FXML
@@ -44,12 +51,15 @@ public class AddDialogController implements Initializable {
      //add item into table
     public void add(){
           //create entry for the table
-        TableRoles entry = new TableRoles();
-        entry.setRolesNamColumn(rolesTextField.getText());
+        TableVariants entry = new TableVariants();
+        entry.setVariantsID(Integer.parseInt(variantIField.getText()));
+        entry.setEngineName(engineNameField.getText());
+        entry.setDenomination(denominationField.getText());
+        entry.setGearbox(gearboxField.getText());
+        entry.setEmissionsCategory(emissionsCategoryField.getText());
         
        //insert data in the table
-       RolesController.add(entry);
-       
+       TabVariantsController.add(entry);
        //clear the entry form
         clearForm();
     }
@@ -60,7 +70,11 @@ public class AddDialogController implements Initializable {
   
     // clear form method
     public void clearForm(){
-        rolesTextField.clear();
+        variantIField.clear();
+        engineNameField.clear();
+        denominationField.clear();
+        gearboxField.clear();
+        emissionsCategoryField.clear();
     }
    
      

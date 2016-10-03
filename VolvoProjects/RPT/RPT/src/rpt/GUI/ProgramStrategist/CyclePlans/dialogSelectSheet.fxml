@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="180.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.ProgramStrategist.CyclePlans.DialogSelectSheetController">
+   <children>
+      <HBox fx:id="mainContainer" prefHeight="145.0" prefWidth="400.0">
+         <children>
+            <VBox fx:id="leftContainer" prefHeight="360.0" prefWidth="300.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="10.0" top="10.0" />
+               </padding></VBox>
+            <VBox fx:id="rightContainer" prefHeight="360.0" prefWidth="300.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="10.0" top="10.0" />
+               </padding></VBox>
+         </children>
+      </HBox>
+      <HBox prefHeight="35.0" prefWidth="120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonPressed" text="OK">
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeDialog" text="Cancel" HBox.hgrow="NEVER">
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

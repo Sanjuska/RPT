@@ -139,6 +139,11 @@ public class DevelopmentProcessController implements Initializable {
     public static ObservableList<String> getProcessList(){
         return processList;
     }
+    
+    //to be used to extract which gates belong to a set process
+    public static  ObservableList<String> getGateList(String process){
+        return gateDictionary.get(process);
+    }
        //Click to add process 
         public void addProcessButtonPressed(ActionEvent event) throws IOException{
             System.out.println("Add procces button");

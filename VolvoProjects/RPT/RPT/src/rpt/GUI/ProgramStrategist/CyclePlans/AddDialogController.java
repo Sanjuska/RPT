@@ -3,9 +3,8 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package rpt.GUI.GroupManager.Roles;
+package rpt.GUI.ProgramStrategist.CyclePlans;
 
-import rpt.GUI.ProgramStrategist.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -27,7 +26,11 @@ import javafx.stage.Stage;
 public class AddDialogController implements Initializable {
     
     @FXML
-            TextField rolesTextField;
+            TextField plant;
+    @FXML
+            TextField platform;
+    @FXML
+            TextField gearboxField;
     @FXML
             Button addButton;
     @FXML
@@ -44,12 +47,14 @@ public class AddDialogController implements Initializable {
      //add item into table
     public void add(){
           //create entry for the table
-        TableRoles entry = new TableRoles();
-        entry.setRolesNamColumn(rolesTextField.getText());
+        TableVariants entry = new TableVariants();
+        //entry.setEngineName(engineNameField.getText());
+        //entry.setDenomination(denominationField.getText());
+        entry.setGearbox(gearboxField.getText());
+        //entry.setEmissionsCategory(emissionsCategoryField.getText());
         
        //insert data in the table
-       RolesController.add(entry);
-       
+       CyclePlansController.add(entry);
        //clear the entry form
         clearForm();
     }
@@ -60,14 +65,18 @@ public class AddDialogController implements Initializable {
   
     // clear form method
     public void clearForm(){
-        rolesTextField.clear();
+        //variantIField.clear();
+        //engineNameField.clear();
+        //denominationField.clear();
+        gearboxField.clear();
+        //emissionsCategoryField.clear();
     }
    
      
     public void closeDialog(){
         Stage stage = (Stage) doneButton.getScene().getWindow();
         stage.close();
-}
+    }
     //Key handler
     public void keyHandler(KeyEvent t) {
                 //add current input on ENTER

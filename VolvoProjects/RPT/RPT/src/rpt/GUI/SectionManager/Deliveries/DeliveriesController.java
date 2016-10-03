@@ -99,7 +99,7 @@ public class DeliveriesController implements Initializable {
         tableDeliveries.getItems().removeAll(removeDeliveries);
     }   
     
-    //
+    //This method is triggered 
     public void processSelected (){
         String process = processBox.getSelectionModel().getSelectedItem().toString();
         gateBox.setItems(DevelopmentProcessController.getGateList(process));

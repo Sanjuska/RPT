@@ -220,7 +220,7 @@ public class MainWindowController implements Initializable {
                          System.out.println("Open Cycle Plans:");
                          try {
                              //load new view in main view pane   
-                             viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/Variants.fxml")));
+                             viewPane.setCenter(FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/CyclePlans.fxml")));
                          } catch (IOException e) {
                              e.printStackTrace();
                          }

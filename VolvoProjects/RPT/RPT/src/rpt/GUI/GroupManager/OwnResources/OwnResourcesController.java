@@ -5,24 +5,16 @@
  */
 package rpt.GUI.GroupManager.OwnResources;
 
-import com.sun.javafx.scene.control.skin.TableViewSkin;
-import static java.awt.PageAttributes.ColorType.COLOR;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -42,17 +34,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.controlsfx.control.spreadsheet.SpreadsheetView;
-import rpt.GUI.ProgramManager.TableVariants;
 
 /**
  * FXML Controller class
@@ -109,11 +96,7 @@ public class OwnResourcesController implements Initializable {
     
     @FXML
     DatePicker finishDatePicker;
-    
-    @FXML
-    SpreadsheetView tableView;
-    
-    static Pane arcContainer = new Pane();
+   
     @FXML
     Arc arc;
     private final String pattern = "yyyy-MM-dd";
