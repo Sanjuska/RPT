@@ -186,13 +186,6 @@ public class DevelopmentProcessController implements Initializable {
             tableGates.setItems(data);
         }
         
-        //called from the add dialog when a new process is created
-        //public void showSelectedProcess(String comboEntry){
-        //  processComboBox.getSelectionModel().select(comboEntry);
-          //tableGates.setItems(processDictionary.get(processComboBox.getSelectionModel().getSelectedItem().toString()));
-        //  data = processDictionary.get(processComboBox.getSelectionModel().getSelectedItem().toString());
-        //  gateList = gateDictionary.get(processComboBox.getSelectionModel().getSelectedItem().toString());
-        //}
         
         //Switch process
         public void processSelected(){

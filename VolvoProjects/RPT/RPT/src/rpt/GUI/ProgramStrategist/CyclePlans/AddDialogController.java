@@ -47,7 +47,7 @@ public class AddDialogController implements Initializable {
      //add item into table
     public void add(){
           //create entry for the table
-        TableVariants entry = new TableVariants();
+        TableVariant entry = new TableVariant();
         //entry.setEngineName(engineNameField.getText());
         //entry.setDenomination(denominationField.getText());
         entry.setGearbox(gearboxField.getText());

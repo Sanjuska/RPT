@@ -21,7 +21,7 @@ import javafx.scene.input.KeyEvent;
  * @author colak
  */
 
-public class EditingCell extends TableCell<TableVariants, String> {
+public class EditingCell extends TableCell<TableVariant, String> {
     private TextField textField;
     public EditingCell() {
     }
@@ -102,9 +102,9 @@ public class EditingCell extends TableCell<TableVariants, String> {
      * @param forward true gets the column to the right, false the column to the left of the current column
      * @return
      */
-    private TableColumn<TableVariants, ?> getNextColumn(boolean forward) {
-        List<TableColumn<TableVariants, ?>> columns = new ArrayList<>();
-        for (TableColumn<TableVariants, ?> column : getTableView().getColumns()) {
+    private TableColumn<TableVariant, ?> getNextColumn(boolean forward) {
+        List<TableColumn<TableVariant, ?>> columns = new ArrayList<>();
+        for (TableColumn<TableVariant, ?> column : getTableView().getColumns()) {
             //columns.addAll(getLeaves(column));
         }
         //There is no other column that supports editing.

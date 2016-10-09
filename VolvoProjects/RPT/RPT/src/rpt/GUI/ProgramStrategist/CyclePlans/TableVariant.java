@@ -12,10 +12,10 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @author colak
  */
-public class TableVariants {
+public class TableVariant {
     
     //Used during initial testing
-    private  String variantsID;
+    private  String variantID;
     private  String engineName;
     private  String denomination;
     private  String gearbox;
@@ -42,10 +42,11 @@ public class TableVariants {
     private String emissionClass;
     private String startOfProd;
     private String endOfProd;
+    private String oldSOP; //Used for setting moved data during cycle plan comparison in CompareDialogController.java
     
     
-    public TableVariants(){
-        this.variantsID = "";
+    public TableVariant(){
+        this.variantID = "";
         this.engineName = "";
         this.denomination = "";
         this.gearbox = "";
@@ -72,13 +73,13 @@ public class TableVariants {
         this.endOfProd = "";
     }
 
-    public TableVariants(String plant, String platform, String vehicle,  String propulsion, 
+    public TableVariant(String plant, String platform, String vehicle,  String propulsion, 
             String denomination, char fuel, String engineFamily, int generation,
             String engineName, String engineCode, float displacement, int enginePower,
             int elMotorPower, int torque, int torqueOverBoost, char gearboxType,
             int gears, String gearbox, String driveline, char transmissionCode, 
             String emissionClass, String startOfProd, String endOfProd) {
-        this.variantsID = vehicle + engineCode + transmissionCode + emissionClass + startOfProd;
+        this.variantID = vehicle + engineCode + transmissionCode + emissionClass + startOfProd;
         this.plant = plant;
         this.platform = platform;
         this.vehicle = vehicle;
@@ -104,12 +105,12 @@ public class TableVariants {
         this.endOfProd = endOfProd;
     }
 
-    public String getVariantsID() {
-        return variantsID;
+    public String getVariantID() {
+        return variantID;
     }
 
-    public void setVariantsID(String variantsID) {
-        this.variantsID = variantsID;
+    public void setVariantID(String variantID) {
+        this.variantID = variantID;
     }
 
     public String getEngineName() {
@@ -302,6 +303,104 @@ public class TableVariants {
 
     public void setEndOfProd(String endOfProd) {
         this.endOfProd = endOfProd;
+    }
+
+    public String getOldSOP() {
+        return oldSOP;
+    }
+
+    public void setOldSOP(String oldSOP) {
+        this.oldSOP = oldSOP;
+    }
+    
+    public void setValue(String dataField, Object input){
+        Double doubleVal = null;
+        String floatVal = null;
+        String stringVal = null;
+        
+        switch(dataField){
+            case "Plant":
+                setPlant((String) input);
+                break;
+            case "Platform":
+                setPlatform((String) input);
+                break;
+            case "Vehicle":
+                setVehicle((String) input);
+                break;
+            case "Propulsion":
+                setPropulsion((String) input);
+                break;
+            case "Denomination":
+                setDenomination((String) input);
+                break;
+            case "Fuel":
+                setFuel(input.toString().charAt(0));
+                break;
+            case "Engine Family":
+                setEngineFamily((String) input);
+                break;
+            case "VEA4/\n" + "GEP3 Gen":
+                doubleVal = (Double) input;
+                setGeneration(doubleVal.intValue());
+                break;
+            case "Engine code":
+                setEngineCode((String) input);
+                break;
+            case "Displacement":
+                floatVal = (String) input;
+                setDisplacement (Float.parseFloat(floatVal));
+                break;
+            case "Engine power PS":
+                doubleVal = (Double) input;
+                setEnginePower (doubleVal.intValue());
+                break;
+            case "EL motor power PS":
+                doubleVal = (Double) input;
+                setElMotorPower (doubleVal.intValue());
+                break;
+            case "Torque":
+                doubleVal = (Double) input;
+                setTorque (doubleVal.intValue());
+                break;
+            case "Torque overboost":
+                doubleVal = (Double) input;
+                setTorqueOverBoost (doubleVal.intValue());
+                break;
+            case "Gearbox type":
+                setGearBoxType (input.toString().charAt(0));
+                break;
+            case "Gears":
+                //doubleVal = (Double) input;
+                stringVal = (String) input;
+                setGears (Integer.valueOf(stringVal));
+                break;
+            case "Gearbox":
+                setGearbox ((String) input);
+                break;
+            case "Driveline":
+                setDriveline((String) input);
+                break;
+            case "Transm Code":
+                setTransmissionCode (input.toString().charAt(0));
+                break;
+            case "Emiss":
+                setEmissionClass ((String) input);
+            default:
+                break;
+            case "Start of prod":
+                //convert from YYWW.0 format to YYwWW
+                doubleVal = (Double) input;
+                stringVal = doubleVal.toString();
+                setStartOfProd (stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
+                break;
+            case "End of prod":
+                 //convert from YYWW.0 format to YYwWW
+                doubleVal = (Double) input;
+                stringVal = doubleVal.toString();
+                setEndOfProd (stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
+                break;
+        }
     }
     
 }
