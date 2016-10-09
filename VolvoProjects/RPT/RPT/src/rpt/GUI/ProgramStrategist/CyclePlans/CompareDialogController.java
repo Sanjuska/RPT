@@ -67,10 +67,10 @@ public class CompareDialogController implements Initializable {
             while (rs.next()) {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                         rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
-                        rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getInt("Generation"),
-                        "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getInt("EnginePower"),
-                        rs.getInt("ElMotorPower"), rs.getInt("Torque"), rs.getInt("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
-                        rs.getInt("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
+                        rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
+                        "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getString("EnginePower"),
+                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
+                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
                         rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
                 currentCyclePlan.put(entry.getVariantID(), entry);
             }
@@ -83,10 +83,10 @@ public class CompareDialogController implements Initializable {
             while (rs.next()) {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                         rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
-                        rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getInt("Generation"),
-                        "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getInt("EnginePower"),
-                        rs.getInt("ElMotorPower"), rs.getInt("Torque"), rs.getInt("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
-                        rs.getInt("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
+                        rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
+                        "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getString("EnginePower"),
+                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
+                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
                         rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
                 oldCyclePlan.put(entry.getVariantID(), entry);
             }
@@ -156,33 +156,51 @@ public class CompareDialogController implements Initializable {
 
         // Write Added variant information
         sheet = workbook.createSheet("Added");
+        row = sheet.createRow(0);
+        writeHeaders(row, false);
+        int rowNum = 1;
         // loop through added
         for (Iterator<Map.Entry<String, TableVariant>> entries = currentCyclePlan.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             System.out.println("Added: " + entry.getKey());
-            row = sheet.createRow(0);
-            cell = row.createCell(0);
+            row = sheet.createRow(rowNum);
+            writeRow(row, entry.getValue(), false);
             
-            
-            
+            rowNum++;
         }
         
         
         // Write Removed variant information
         sheet = workbook.createSheet("Removed");
+        row = sheet.createRow(0);
+        writeHeaders(row, false);
+        rowNum = 1;
         // loop through removed
         for (Iterator<Map.Entry<String, TableVariant>> entries = oldCyclePlan.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             System.out.println("Removed: " + entry.getKey());
+            row = sheet.createRow(rowNum);
+            writeRow(row, entry.getValue(), false);
+            
+            rowNum++;
         }
 
         
         // Write Moved variant information
         sheet = workbook.createSheet("Moved");
+        row = sheet.createRow(0);
+        writeHeaders(row, true);
+        rowNum = 1;
         // loop through added
         for (Iterator<Map.Entry<String, TableVariant>> entries = movedVariants.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             System.out.println("Moved: " + entry.getKey() + " from: " + entry.getValue().getOldSOP() + " to: " + entry.getValue().getStartOfProd());
+            
+            row = sheet.createRow(rowNum);
+            writeRow(row, entry.getValue(), true);
+            
+            rowNum++;
+            
         }
         
         
@@ -221,6 +239,146 @@ public class CompareDialogController implements Initializable {
         stage.close();
     }
 
+    private void writeHeaders(Row row, Boolean addOldSOP){
+        Cell cell = row.createCell(0);
+        cell.setCellValue("Plant");
+        
+        cell = row.createCell(1);
+        cell.setCellValue("Platform");
+        
+        cell = row.createCell(2);
+        cell.setCellValue("Vehicle");
+        
+        cell = row.createCell(3);
+        cell.setCellValue("Propulsion");
+        
+        cell = row.createCell(4);
+        cell.setCellValue("Denomination");
+        
+        cell = row.createCell(5);
+        cell.setCellValue("Fuel");
+        
+        cell = row.createCell(6);
+        cell.setCellValue("Engine Family");
+        
+        cell = row.createCell(7);
+        cell.setCellValue("Generation");
+        
+        cell = row.createCell(8);
+        cell.setCellValue("Engine Code");
+        
+        cell = row.createCell(9);
+        cell.setCellValue("Displacement");
+        
+        cell = row.createCell(10);
+        cell.setCellValue("Engine power (PS)");
+        
+        cell = row.createCell(11);
+        cell.setCellValue("Electric motor power (PS)");
+        
+        cell = row.createCell(12);
+        cell.setCellValue("Torque");
+        
+        cell = row.createCell(13);
+        cell.setCellValue("Torque overboost");
+        
+        cell = row.createCell(14);
+        cell.setCellValue("Gearbox Type");
+        
+        cell = row.createCell(15);
+        cell.setCellValue("Gears");
+        
+        cell = row.createCell(16);
+        cell.setCellValue("Gearbox");
+        
+        cell = row.createCell(17);
+        cell.setCellValue("Driveline");
+        
+        cell = row.createCell(18);
+        cell.setCellValue("Transmission Code");
+        
+        cell = row.createCell(19);
+        cell.setCellValue("Emission Class");
+        
+        cell = row.createCell(20);
+        cell.setCellValue("SOP");
+        
+        if (addOldSOP) {
+            cell = row.createCell(21);
+            cell.setCellValue("Old SOP");
+        }
+    }
+    
+    private void writeRow(Row row, TableVariant variant, Boolean addOldSOP){
+        Cell cell = row.createCell(0);
+        cell.setCellValue(variant.getPlant());
+        
+        cell = row.createCell(1);
+        cell.setCellValue(variant.getPlatform());
+        
+        cell = row.createCell(2);
+        cell.setCellValue(variant.getVehicle());
+        
+        cell = row.createCell(3);
+        cell.setCellValue(variant.getPropulsion());
+        
+        cell = row.createCell(4);
+        cell.setCellValue(variant.getDenomination());
+        
+        cell = row.createCell(5);
+        cell.setCellValue(variant.getFuel());
+        
+        cell = row.createCell(6);
+        cell.setCellValue(variant.getEngineFamily());
+        
+        cell = row.createCell(7);
+        cell.setCellValue(variant.getGeneration());
+        
+        cell = row.createCell(8);
+        cell.setCellValue(variant.getEngineCode());
+        
+        cell = row.createCell(9);
+        cell.setCellValue(variant.getDisplacement());
+        
+        cell = row.createCell(10);
+        cell.setCellValue(variant.getEnginePower());
+        
+        cell = row.createCell(11);
+        cell.setCellValue(variant.getElMotorPower());
+        
+        cell = row.createCell(12);
+        cell.setCellValue(variant.getTorque());
+        
+        cell = row.createCell(13);
+        cell.setCellValue(variant.getTorqueOverBoost());
+        
+        cell = row.createCell(14);
+        cell.setCellValue(variant.getGearBoxType());
+        
+        cell = row.createCell(15);
+        cell.setCellValue(variant.getGears());
+        
+        cell = row.createCell(16);
+        cell.setCellValue(variant.getGearbox());
+        
+        cell = row.createCell(17);
+        cell.setCellValue(variant.getDriveline());
+        
+        cell = row.createCell(18);
+        cell.setCellValue(variant.getTransmissionCode());
+        
+        cell = row.createCell(19);
+        cell.setCellValue(variant.getEmissionsCategory());
+        
+        cell = row.createCell(20);
+        cell.setCellValue(variant.getStartOfProd());
+        
+        if (addOldSOP) {
+            cell = row.createCell(21);
+            cell.setCellValue(variant.getOldSOP());
+        }
+    }
+    
     /**
      * Initializes the controller class.
      */

@@ -28,15 +28,15 @@ public class TableVariant {
     private String propulsion;
     private char fuel;
     private String engineFamily;
-    private int generation;
+    private String generation;
     private String engineCode;
     private float displacement;
-    private int enginePower;
-    private int elMotorPower;
-    private int torque;
-    private int torqueOverBoost;
+    private String enginePower;
+    private String elMotorPower;
+    private String torque;
+    private String torqueOverBoost;
     private char gearBoxType;
-    private int gears;
+    private String gears;
     private String driveline;
     private char transmissionCode;
     private String emissionClass;
@@ -57,15 +57,15 @@ public class TableVariant {
         this.propulsion = "";
         this.fuel = Character.MIN_VALUE;
         this.engineFamily = "";
-        this.generation = 1;
+        this.generation = "1";
         this.engineCode = "";
         this.displacement = 0.0f;
-        this.enginePower = 0;
-        this.elMotorPower = 0;
-        this.torque = 0;
-        this.torqueOverBoost = 0;
+        this.enginePower = "0";
+        this.elMotorPower = "0";
+        this.torque = "0";
+        this.torqueOverBoost = "0";
         this.gearBoxType = Character.MIN_VALUE;
-        this.gears = 0;
+        this.gears = "0";
         this.driveline = "";
         this.transmissionCode = Character.MIN_VALUE;
         this.emissionClass = "";
@@ -74,10 +74,10 @@ public class TableVariant {
     }
 
     public TableVariant(String plant, String platform, String vehicle,  String propulsion, 
-            String denomination, char fuel, String engineFamily, int generation,
-            String engineName, String engineCode, float displacement, int enginePower,
-            int elMotorPower, int torque, int torqueOverBoost, char gearboxType,
-            int gears, String gearbox, String driveline, char transmissionCode, 
+            String denomination, char fuel, String engineFamily, String generation,
+            String engineName, String engineCode, float displacement, String enginePower,
+            String elMotorPower, String torque, String torqueOverBoost, char gearboxType,
+            String gears, String gearbox, String driveline, char transmissionCode, 
             String emissionClass, String startOfProd, String endOfProd) {
         this.variantID = vehicle + engineCode + transmissionCode + emissionClass + startOfProd;
         this.plant = plant;
@@ -193,11 +193,11 @@ public class TableVariant {
         this.engineFamily = engineFamily;
     }
 
-    public int getGeneration() {
+    public String getGeneration() {
         return generation;
     }
 
-    public void setGeneration(int generation) {
+    public void setGeneration(String generation) {
         this.generation = generation;
     }
 
@@ -217,35 +217,35 @@ public class TableVariant {
         this.displacement = displacement;
     }
 
-    public int getEnginePower() {
+    public String getEnginePower() {
         return enginePower;
     }
 
-    public void setEnginePower(int enginePower) {
+    public void setEnginePower(String enginePower) {
         this.enginePower = enginePower;
     }
 
-    public int getElMotorPower() {
+    public String getElMotorPower() {
         return elMotorPower;
     }
 
-    public void setElMotorPower(int elMotorPower) {
+    public void setElMotorPower(String elMotorPower) {
         this.elMotorPower = elMotorPower;
     }
 
-    public int getTorque() {
+    public String getTorque() {
         return torque;
     }
 
-    public void setTorque(int torque) {
+    public void setTorque(String torque) {
         this.torque = torque;
     }
 
-    public int getTorqueOverBoost() {
+    public String getTorqueOverBoost() {
         return torqueOverBoost;
     }
 
-    public void setTorqueOverBoost(int torqueOverBoost) {
+    public void setTorqueOverBoost(String torqueOverBoost) {
         this.torqueOverBoost = torqueOverBoost;
     }
 
@@ -257,11 +257,11 @@ public class TableVariant {
         this.gearBoxType = gearBoxType;
     }
 
-    public int getGears() {
+    public String getGears() {
         return gears;
     }
 
-    public void setGears(int gears) {
+    public void setGears(String gears) {
         this.gears = gears;
     }
 
@@ -341,8 +341,9 @@ public class TableVariant {
                 setEngineFamily((String) input);
                 break;
             case "VEA4/\n" + "GEP3 Gen":
-                doubleVal = (Double) input;
-                setGeneration(doubleVal.intValue());
+                //doubleVal = (Double) input;
+                //setGeneration(doubleVal.intValue());
+                setGeneration((String) input);
                 break;
             case "Engine code":
                 setEngineCode((String) input);
@@ -352,28 +353,33 @@ public class TableVariant {
                 setDisplacement (Float.parseFloat(floatVal));
                 break;
             case "Engine power PS":
-                doubleVal = (Double) input;
-                setEnginePower (doubleVal.intValue());
+                //doubleVal = (Double) input;
+                //setEnginePower (doubleVal.intValue());
+                setEnginePower ((String) input);
                 break;
             case "EL motor power PS":
-                doubleVal = (Double) input;
-                setElMotorPower (doubleVal.intValue());
+                //doubleVal = (Double) input;
+                //setElMotorPower (doubleVal.intValue());
+                setElMotorPower ((String) input);
                 break;
             case "Torque":
-                doubleVal = (Double) input;
-                setTorque (doubleVal.intValue());
+                //doubleVal = (Double) input;
+                //setTorque (doubleVal.intValue());
+                setTorque ((String) input);
                 break;
             case "Torque overboost":
-                doubleVal = (Double) input;
-                setTorqueOverBoost (doubleVal.intValue());
+                //doubleVal = (Double) input;
+                //setTorqueOverBoost (doubleVal.intValue());
+                setTorqueOverBoost ((String) input);
                 break;
             case "Gearbox type":
                 setGearBoxType (input.toString().charAt(0));
                 break;
             case "Gears":
                 //doubleVal = (Double) input;
-                stringVal = (String) input;
-                setGears (Integer.valueOf(stringVal));
+                //stringVal = (String) input;
+                //setGears (Integer.valueOf(stringVal));
+                setGears ((String) input);
                 break;
             case "Gearbox":
                 setGearbox ((String) input);
@@ -390,14 +396,16 @@ public class TableVariant {
                 break;
             case "Start of prod":
                 //convert from YYWW.0 format to YYwWW
-                doubleVal = (Double) input;
-                stringVal = doubleVal.toString();
+                //doubleVal = (Double) input;
+                //stringVal = doubleVal.toString();
+                stringVal = (String) input;
                 setStartOfProd (stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
                 break;
             case "End of prod":
                  //convert from YYWW.0 format to YYwWW
-                doubleVal = (Double) input;
-                stringVal = doubleVal.toString();
+                //doubleVal = (Double) input;
+                //stringVal = doubleVal.toString();
+                stringVal = (String) input;
                 setEndOfProd (stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
                 break;
         }

@@ -121,7 +121,7 @@ public class CyclePlansController implements Initializable {
     // ObservableList object enables the tracking of any changes to its elements
     private static ObservableList<TableVariant> data = FXCollections.observableArrayList(
             new TableVariant("Torslanda", "SPA", "V526", "ICE", "T6", 'G', "VEP4 HP",
-                    1, "B4204T27", "A2", 2.0f, 320, 0, 400, 0, 'A', 8, "AWF22",
+                    "1", "B4204T27", "A2", 2.0f, "320", "0", "400", "0", 'A', "8", "AWF22",
                     "AWD", 'C', "Euro6b", "15w05", "17w17")
     );
 
@@ -168,17 +168,17 @@ public class CyclePlansController implements Initializable {
             while (rs.next()){
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                             rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
-                            rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getInt("Generation"),
-                            "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getInt("EnginePower"),
-                            rs.getInt("ElMotorPower"), rs.getInt("Torque"), rs.getInt("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
-                            rs.getInt("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
+                            rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
+                            "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getString("EnginePower"),
+                            rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
+                            rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
                             rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
                     add(entry);
             }
             cyclePlanSelector.setItems(cyclePlanList);
         }
         catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("CyclePlansController line 181: " + e.getMessage());
         }
     }
     
@@ -317,7 +317,7 @@ public class CyclePlansController implements Initializable {
                     //First row is now found, loop through entire row and build a
                     while (cellIterator.hasNext()) {
                         if (getCellValue(nextCell) != null) { //blank cells return null
-                            dictionary.put(nextCell.getColumnIndex(), (String) getCellValue(nextCell));
+                            dictionary.put(nextCell.getColumnIndex(), getCellValue(nextCell).toString());
                         }
                         nextCell = cellIterator.next();
                     }
@@ -332,7 +332,7 @@ public class CyclePlansController implements Initializable {
                             nextCell = cellIterator.next();
                             int columnIndex = nextCell.getColumnIndex();
                             if (getCellValue(nextCell) != null) {
-                                aVariant.setValue(dictionary.get(nextCell.getColumnIndex()), getCellValue(nextCell));
+                                aVariant.setValue(dictionary.get(nextCell.getColumnIndex()), getCellValue(nextCell).toString());
                             } else {
                             }
 
@@ -340,7 +340,7 @@ public class CyclePlansController implements Initializable {
                         variants.add(aVariant);
                     }
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
+                    System.err.println("CyclePlansController line 343: " +e.getMessage());
                 }
                 
                 //remove current selection and add the new variants
@@ -391,7 +391,7 @@ public class CyclePlansController implements Initializable {
                         statement.executeUpdate(query);
 
                     } catch (Exception e) {
-                        System.err.println(e.getMessage());
+                        System.err.println("CyclePlansController line 394: " +e.getMessage());
                     }
                 }
                 cyclePlanList.add(importedCyclePlanName);
@@ -467,7 +467,7 @@ public class CyclePlansController implements Initializable {
             cyclePlanSelector.setItems(cyclePlanList);
         }
         catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("CyclePlansController line 470: " +e.getMessage());
         }
     }
 
