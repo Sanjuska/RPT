@@ -68,7 +68,7 @@ public class CompareDialogController implements Initializable {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                         rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
                         rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
-                        "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getString("EnginePower"),
+                        "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
                         rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
                         rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
                         rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
@@ -84,7 +84,7 @@ public class CompareDialogController implements Initializable {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                         rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
                         rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
-                        "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getString("EnginePower"),
+                        "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
                         rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
                         rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
                         rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));

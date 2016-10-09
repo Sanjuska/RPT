@@ -30,7 +30,7 @@ public class TableVariant {
     private String engineFamily;
     private String generation;
     private String engineCode;
-    private float displacement;
+    private String displacement;
     private String enginePower;
     private String elMotorPower;
     private String torque;
@@ -59,7 +59,7 @@ public class TableVariant {
         this.engineFamily = "";
         this.generation = "1";
         this.engineCode = "";
-        this.displacement = 0.0f;
+        this.displacement = "";
         this.enginePower = "0";
         this.elMotorPower = "0";
         this.torque = "0";
@@ -75,7 +75,7 @@ public class TableVariant {
 
     public TableVariant(String plant, String platform, String vehicle,  String propulsion, 
             String denomination, char fuel, String engineFamily, String generation,
-            String engineName, String engineCode, float displacement, String enginePower,
+            String engineName, String engineCode, String displacement, String enginePower,
             String elMotorPower, String torque, String torqueOverBoost, char gearboxType,
             String gears, String gearbox, String driveline, char transmissionCode, 
             String emissionClass, String startOfProd, String endOfProd) {
@@ -166,6 +166,8 @@ public class TableVariant {
     }
 
     public void setPlatform(String platform) {
+        //If platform contains the ' character, then the SQLs will be broken. Needs to be replaced with ''
+        platform = platform.replaceAll("'", "prim");
         this.platform = platform;
     }
 
@@ -209,11 +211,11 @@ public class TableVariant {
         this.engineCode = engineCode;
     }
 
-    public float getDisplacement() {
+    public String getDisplacement() {
         return displacement;
     }
 
-    public void setDisplacement(float displacement) {
+    public void setDisplacement(String displacement) {
         this.displacement = displacement;
     }
 
@@ -349,8 +351,9 @@ public class TableVariant {
                 setEngineCode((String) input);
                 break;
             case "Displacement":
-                floatVal = (String) input;
-                setDisplacement (Float.parseFloat(floatVal));
+                //floatVal = (String) input;
+                //setDisplacement (Float.parseFloat(floatVal));
+                setDisplacement((String) input);
                 break;
             case "Engine power PS":
                 //doubleVal = (Double) input;

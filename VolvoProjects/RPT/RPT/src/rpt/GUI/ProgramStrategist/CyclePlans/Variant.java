@@ -25,7 +25,7 @@ public class Variant {
     String generation;
     String engineName;
     String engineCode;
-    float displacement;
+    String displacement;
     String enginePower;
     String elMotorPower;
     String torque;
@@ -74,6 +74,8 @@ public class Variant {
     }
 
     public void setPlatform(String platform) {
+        //If platform contains the ' character, then the SQLs will be broken. Needs to be replaced with ''
+        platform = platform.replaceAll("'", "prim");
         this.platform = platform;
     }
     
@@ -165,11 +167,11 @@ public class Variant {
         this.engineCode = engineCode;
     }
 
-    public float getDisplacement() {
+    public String getDisplacement() {
         return displacement;
     }
 
-    public void setDisplacement(float displacement) {
+    public void setDisplacement(String displacement) {
         this.displacement = displacement;
     }
 
@@ -313,8 +315,9 @@ public class Variant {
                 setEngineCode((String) input);
                 break;
             case "Displacement":
-                floatVal = (String) input;
-                setDisplacement (Float.parseFloat(floatVal));
+                //floatVal = (String) input;
+                //setDisplacement (Float.parseFloat(floatVal));
+                setDisplacement((String) input);
                 break;
             case "Engine power PS":
                 //doubleVal = (Double) input;

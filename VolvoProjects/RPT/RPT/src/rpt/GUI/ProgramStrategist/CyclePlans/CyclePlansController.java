@@ -121,7 +121,7 @@ public class CyclePlansController implements Initializable {
     // ObservableList object enables the tracking of any changes to its elements
     private static ObservableList<TableVariant> data = FXCollections.observableArrayList(
             new TableVariant("Torslanda", "SPA", "V526", "ICE", "T6", 'G', "VEP4 HP",
-                    "1", "B4204T27", "A2", 2.0f, "320", "0", "400", "0", 'A', "8", "AWF22",
+                    "1", "B4204T27", "A2", "2.0", "320", "0", "400", "0", 'A', "8", "AWF22",
                     "AWD", 'C', "Euro6b", "15w05", "17w17")
     );
 
@@ -169,7 +169,7 @@ public class CyclePlansController implements Initializable {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                             rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
                             rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
-                            "EngineName not used", rs.getString("EngineCode"), rs.getFloat("Displacement"), rs.getString("EnginePower"),
+                            "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
                             rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
                             rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
                             rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
@@ -387,10 +387,12 @@ public class CyclePlansController implements Initializable {
                             statement.executeUpdate(query);
                         }
                         // Add connection between cycle plan and variant
+                        
                         query = "INSERT INTO VariantBelongsToCyclePlan (VariantID, CyclePlanID) VALUES (\'" + variantID + "\', \'" + importedCyclePlanName + "\')";
                         statement.executeUpdate(query);
 
                     } catch (Exception e) {
+                        System.out.println("Query: " + query);
                         System.err.println("CyclePlansController line 394: " +e.getMessage());
                     }
                 }
