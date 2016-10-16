@@ -59,8 +59,6 @@ public class DialogSelectSheetController implements Initializable {
     // When the OK button is pressed the seelcted sheet will be set in the 
     // parent controller
     public void okButtonPressed(){
-        // TODO identify which radio button was selected
-        // send text of the selected button to the parent controller
         CyclePlansController.selectedSheet = sheetName;
         
         closeDialog();
@@ -81,7 +79,6 @@ public class DialogSelectSheetController implements Initializable {
         List<String> buttons = CyclePlansController.getSheets();
         boolean left = true;
         for (String b : buttons){
-            System.out.println(b);
             RadioButton rb = new RadioButton(b);
             rb.setToggleGroup(sheetGroup);
             //rb.setPadding(new Insets(20, 10, 10, 20)););
@@ -93,7 +90,7 @@ public class DialogSelectSheetController implements Initializable {
                 left = true;
             }
             
-            //TODO Check if string contains the words Raw, make it preselected if it does
+            //Check if string contains the words Raw, make it preselected if it does
             if (b.toLowerCase().contains("raw")){
                 rb.requestFocus();
                 rb.setSelected(true);

@@ -46,6 +46,8 @@ public class LoginController implements Initializable {
            String query = "SELECT * FROM USERS WHERE cdsid = '" + cdsidField.getText() + "'";
            ResultSet rs = statement.executeQuery(query);
            
+           //TODO Add PRAGMA Truncate when creating new database or you may get disk errors
+           
            //Extract password
            password = rs.getString("password");
             

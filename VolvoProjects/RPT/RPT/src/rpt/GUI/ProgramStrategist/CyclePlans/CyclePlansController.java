@@ -16,6 +16,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -56,6 +57,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -85,6 +87,8 @@ public class CyclePlansController implements Initializable {
     @FXML
     public TableColumn<TableVariant, String> emissionsCategory;
     @FXML
+    public TableColumn<TableVariant, String> generation;
+    @FXML
     private Button addButton;
     @FXML
     private Button removeButton;
@@ -103,6 +107,7 @@ public class CyclePlansController implements Initializable {
     public static String selectedSheet = null;
     public static String importedCyclePlanName = null;
     public static String selectedCyclePlan = null;
+    public static String[] defineChanged = null;
     
     public static List sheetsInFile = null;
 
@@ -120,9 +125,9 @@ public class CyclePlansController implements Initializable {
     }
     // ObservableList object enables the tracking of any changes to its elements
     private static ObservableList<TableVariant> data = FXCollections.observableArrayList(
-            new TableVariant("Torslanda", "SPA", "V526", "ICE", "T6", 'G', "VEP4 HP",
-                    "1", "B4204T27", "A2", "2.0", "320", "0", "400", "0", 'A', "8", "AWF22",
-                    "AWD", 'C', "Euro6b", "15w05", "17w17")
+            //new TableVariant("Torslanda", "SPA", "V526", "ICE", "T6", 'G', "VEP4 HP",
+            //        "1", "B4204T27", "A2", "2.0", "320", "0", "400", "0", 'A', "8", "AWF22",
+            //        "AWD", 'C', "Euro6b", "15w05", "17w17")
     );
 
     //Add entry into table
@@ -170,7 +175,7 @@ public class CyclePlansController implements Initializable {
                             rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
                             rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
                             "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
-                            rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("Gearbox").charAt(0),
+                            rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType").charAt(0),
                             rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
                             rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
                     add(entry);
@@ -322,6 +327,10 @@ public class CyclePlansController implements Initializable {
                         nextCell = cellIterator.next();
                     }
 
+                    // Since Excel stores numbers as floats and as an example 1 will turn into 1.0 this will be a problem
+                    // Mainly because the cycle plan tends to mix text and numbers in Excel.
+                    // Create a Dataformatter which will be used to solve this
+                    DataFormatter fmt = new DataFormatter();
                     //loop through all rows in the file
                     while (rowIterator.hasNext()) {
                         Row nextRow = rowIterator.next();
@@ -332,7 +341,8 @@ public class CyclePlansController implements Initializable {
                             nextCell = cellIterator.next();
                             int columnIndex = nextCell.getColumnIndex();
                             if (getCellValue(nextCell) != null) {
-                                aVariant.setValue(dictionary.get(nextCell.getColumnIndex()), getCellValue(nextCell).toString());
+                                aVariant.setValue(dictionary.get(nextCell.getColumnIndex()), fmt.formatCellValue(nextCell));
+                                //aVariant.setValue(dictionary.get(nextCell.getColumnIndex()), getCellValue(nextCell).toString());
                             } else {
                             }
 
@@ -443,6 +453,15 @@ public class CyclePlansController implements Initializable {
         emissionsCategory.setCellValueFactory(new PropertyValueFactory<>("emissionClass"));
         emissionsCategory.setCellFactory(TextFieldTableCell.forTableColumn());
         emissionsCategory.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+            @Override
+            public void handle(CellEditEvent<TableVariant, String> event) {
+                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());
+            }
+        });
+        //specify a cell factory  and enable it editable
+        generation.setCellValueFactory(new PropertyValueFactory<>("generation"));
+        generation.setCellFactory(TextFieldTableCell.forTableColumn());
+        generation.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
             @Override
             public void handle(CellEditEvent<TableVariant, String> event) {
                 ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());

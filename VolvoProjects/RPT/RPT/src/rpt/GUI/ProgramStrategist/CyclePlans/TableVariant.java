@@ -8,21 +8,22 @@ package rpt.GUI.ProgramStrategist.CyclePlans;
 import javafx.css.SimpleStyleableIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+
 /**
  *
  * @author colak
  */
 public class TableVariant {
-    
+
     //Used during initial testing
-    private  String variantID;
-    private  String engineName;
-    private  String denomination;
-    private  String gearbox;
-    private  String emissionsCategory;
+    private String variantID;
+    private String engineName;
+    private String denomination;
+    private String gearbox;
+    private String certGroup;
 
     //added once base functionality was implemented as base set above was not enough
-    private String plant; 
+    private String plant;
     private String vehicle;
     private String platform;
     private String propulsion;
@@ -43,15 +44,15 @@ public class TableVariant {
     private String startOfProd;
     private String endOfProd;
     private String oldSOP; //Used for setting moved data during cycle plan comparison in CompareDialogController.java
-    
-    
-    public TableVariant(){
+    private String oldEOP; //Used for setting moved data during cycle plan comparison in CompareDialogController.java
+
+    public TableVariant() {
         this.variantID = "";
         this.engineName = "";
         this.denomination = "";
         this.gearbox = "";
-        this.emissionsCategory ="";
-        this.plant = ""; 
+        this.certGroup = "";
+        this.plant = "";
         this.vehicle = "";
         this.platform = "";
         this.propulsion = "";
@@ -73,11 +74,11 @@ public class TableVariant {
         this.endOfProd = "";
     }
 
-    public TableVariant(String plant, String platform, String vehicle,  String propulsion, 
+    public TableVariant(String plant, String platform, String vehicle, String propulsion,
             String denomination, char fuel, String engineFamily, String generation,
             String engineName, String engineCode, String displacement, String enginePower,
-            String elMotorPower, String torque, String torqueOverBoost, char gearboxType,
-            String gears, String gearbox, String driveline, char transmissionCode, 
+            String elMotorPower, String torque, String torqueOverBoost, char gearBoxType,
+            String gears, String gearbox, String driveline, char transmissionCode,
             String emissionClass, String startOfProd, String endOfProd) {
         this.variantID = vehicle + engineCode + transmissionCode + emissionClass + startOfProd;
         this.plant = plant;
@@ -137,12 +138,12 @@ public class TableVariant {
         this.gearbox = gearbox;
     }
 
-    public String getEmissionsCategory() {
-        return emissionsCategory;
+    public String getCertGroup() {
+        return certGroup;
     }
 
-    public void setEmissionsCategory(String emissionsCategory) {
-        this.emissionsCategory = emissionsCategory;
+    public void setCertGroup(String certGroup) {
+        this.certGroup = certGroup;
     }
 
     public String getPlant() {
@@ -314,13 +315,21 @@ public class TableVariant {
     public void setOldSOP(String oldSOP) {
         this.oldSOP = oldSOP;
     }
-    
-    public void setValue(String dataField, Object input){
+
+    public String getOldEOP() {
+        return oldEOP;
+    }
+
+    public void setOldEOP(String oldEOP) {
+        this.oldEOP = oldEOP;
+    }
+
+    public void setValue(String dataField, Object input) {
         Double doubleVal = null;
         String floatVal = null;
         String stringVal = null;
-        
-        switch(dataField){
+
+        switch (dataField) {
             case "Plant":
                 setPlant((String) input);
                 break;
@@ -358,43 +367,43 @@ public class TableVariant {
             case "Engine power PS":
                 //doubleVal = (Double) input;
                 //setEnginePower (doubleVal.intValue());
-                setEnginePower ((String) input);
+                setEnginePower((String) input);
                 break;
             case "EL motor power PS":
                 //doubleVal = (Double) input;
                 //setElMotorPower (doubleVal.intValue());
-                setElMotorPower ((String) input);
+                setElMotorPower((String) input);
                 break;
             case "Torque":
                 //doubleVal = (Double) input;
                 //setTorque (doubleVal.intValue());
-                setTorque ((String) input);
+                setTorque((String) input);
                 break;
             case "Torque overboost":
                 //doubleVal = (Double) input;
                 //setTorqueOverBoost (doubleVal.intValue());
-                setTorqueOverBoost ((String) input);
+                setTorqueOverBoost((String) input);
                 break;
             case "Gearbox type":
-                setGearBoxType (input.toString().charAt(0));
+                setGearBoxType(input.toString().charAt(0));
                 break;
             case "Gears":
                 //doubleVal = (Double) input;
                 //stringVal = (String) input;
                 //setGears (Integer.valueOf(stringVal));
-                setGears ((String) input);
+                setGears((String) input);
                 break;
             case "Gearbox":
-                setGearbox ((String) input);
+                setGearbox((String) input);
                 break;
             case "Driveline":
                 setDriveline((String) input);
                 break;
             case "Transm Code":
-                setTransmissionCode (input.toString().charAt(0));
+                setTransmissionCode(input.toString().charAt(0));
                 break;
             case "Emiss":
-                setEmissionClass ((String) input);
+                setEmissionClass((String) input);
             default:
                 break;
             case "Start of prod":
@@ -402,16 +411,71 @@ public class TableVariant {
                 //doubleVal = (Double) input;
                 //stringVal = doubleVal.toString();
                 stringVal = (String) input;
-                setStartOfProd (stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
+                setStartOfProd(stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
                 break;
             case "End of prod":
-                 //convert from YYWW.0 format to YYwWW
+                //convert from YYWW.0 format to YYwWW
                 //doubleVal = (Double) input;
                 //stringVal = doubleVal.toString();
                 stringVal = (String) input;
-                setEndOfProd (stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
+                setEndOfProd(stringVal.substring(0, 2) + "w" + stringVal.substring(2, 4));
                 break;
         }
     }
-    
+
+    public String getValue(String dataField) {
+        Double doubleVal = null;
+        String floatVal = null;
+        String stringVal = null;
+
+        switch (dataField) {
+            case "Plant":
+                return plant;
+            case "Platform":
+                return platform;
+            case "Vehicle":
+                return vehicle;
+            case "Propulsion":
+                return propulsion;
+            case "Denomination":
+                return denomination;
+            case "Fuel":
+                return Character.toString(fuel);
+            case "EngineFamily":
+                return engineFamily;
+            case "Generation":
+                return generation;
+            case "EngineCode":
+                return engineCode;
+            case "Displacement":
+                return displacement;
+            case "EnginePower":
+                return enginePower;
+            case "ELMotorPower":
+                return elMotorPower;
+            case "Torque":
+                return torque;
+            case "TorqueOverBoost":
+                return torqueOverBoost;
+            case "GearboxType":
+                return Character.toString(gearBoxType);
+            case "Gears":
+                return gears;
+            case "Gearbox":
+                return gearbox;
+            case "Driveline":
+                return driveline;
+            case "TransmissionCode":
+                return Character.toString(transmissionCode);
+            case "EmissionClass":
+                return emissionClass;
+            case "StartOfProd":
+                return startOfProd;
+            case "EndOfProd":
+                return endOfProd;
+            default:
+                return ""; //in case of no match
+        }
+    }
+
 }

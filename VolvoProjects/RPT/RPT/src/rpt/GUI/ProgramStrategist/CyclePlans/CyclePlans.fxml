@@ -25,6 +25,7 @@
                   <TableColumn fx:id="denomination" minWidth="0.0" prefWidth="0.0" text="Denomination" />
                   <TableColumn fx:id="gearbox" prefWidth="150.0" text="Gearbox" />
                   <TableColumn fx:id="emissionsCategory" prefWidth="150.0" text="Emission category" />
+                  <TableColumn fx:id="generation" prefWidth="150.0" text="Generation" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
