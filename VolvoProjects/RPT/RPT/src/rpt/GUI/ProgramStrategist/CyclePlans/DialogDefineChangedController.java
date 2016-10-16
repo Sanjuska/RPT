@@ -89,7 +89,7 @@ public class DialogDefineChangedController implements Initializable {
         try {
             Statement statement = RPT.conn.createStatement();
             statement.setQueryTimeout(30);
-            String query = "PRAGMA table_info(VARIANTS);"; //Get all column names
+            String query = "PRAGMA table_info(VARIANTS)"; //Get all column names
             ResultSet rs = statement.executeQuery(query);
 
             //loop through each of the columns and add them as checkboxes

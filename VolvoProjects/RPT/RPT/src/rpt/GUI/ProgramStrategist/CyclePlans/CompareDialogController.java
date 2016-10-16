@@ -34,14 +34,23 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Comment;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.PrintSetup;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import rpt.RPT;
 
 /**
@@ -66,7 +75,8 @@ public class CompareDialogController implements Initializable {
         Map<String, TableVariant> oldCyclePlan = new HashMap<String, TableVariant>();
         Map<String, TableVariant> movedVariants = new HashMap<String, TableVariant>();
         Map<String, TableVariant> changedVariants = new HashMap<String, TableVariant>();
-        Map<String, ArrayList<String>> changedInfo = new HashMap<String, ArrayList<String>>();
+        Map<String, Map<String, String>> changedInfo = new HashMap<String, Map<String, String>>();
+        Map<String, String> diffValues = new HashMap<String, String>();
 
         Statement statement;
         try {
@@ -184,28 +194,71 @@ public class CompareDialogController implements Initializable {
         stage.showAndWait(); // pause until the user has selected minor changes
 
         // Now loop through the remaining Added items and check if they are to be moved to "Modified"
-        for (String s : majorChanges) {
-            System.out.println(s);
+        //for (String s : majorChanges) {
+        //    System.out.println(s);
+        //}
+        // Create string for extracting data which has been judged as minor
+        //String dataString = ""; // Data which will be used for difference check
+        //for (String s : majorChanges) {
+        //    dataString = dataString + ", VARIANTS." + s;
+        //}
+        // Build list of parameters to extract and compare with the new variant
+        ArrayList<String> infoArray = new ArrayList();
+        String query = "PRAGMA table_info(VARIANTS)"; //Get all column names
+        String extractionData = "";
+        try {
+            statement = RPT.conn.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rsColumns = statement.executeQuery(query);
+            //traverser through list of columns and add those not pointed out as MAJOR
+            boolean first = true;
+            while (rsColumns.next()) {
+                if (!(majorChanges.contains(rsColumns.getString("name")))) {
+                    infoArray.add(rsColumns.getString("name"));
+                    if (first) {
+                        extractionData = extractionData + "VARIANTS." + rsColumns.getString("name");
+                        first = false;
+                    } else {
+                        extractionData = extractionData + ", VARIANTS." + rsColumns.getString("name");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("CompareDialogController error when building extraction data: " + e.getMessage());
         }
+
         for (Iterator<Map.Entry<String, TableVariant>> entries = currentCyclePlan.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             try {
                 statement = RPT.conn.createStatement();
                 statement.setQueryTimeout(30);
-                String query = "SELECT VARIANTS.VariantID FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
+                query = "SELECT ";
+                query = query + extractionData;
+                query = query + " FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
                         + "VARIANTS.VariantID = VariantBelongsToCyclePlan.VariantID AND "
                         + "VariantBelongsToCyclePlan.CyclePlanID= \'" + cyclePlanSelector.getSelectionModel().getSelectedItem().toString() + "\'";
 
                 for (String s : majorChanges) {
                     query = query + " AND VARIANTS." + s + " = \'" + entry.getValue().getValue(s) + "\'";
                 }
+                //System.out.println(query);
                 ResultSet rs = statement.executeQuery(query);
                 if (rs.next()) {
+                    // Found "similar enough"
                     changedVariants.put(entry.getKey(), entry.getValue()); //Save variant to moved map
                     entries.remove(); //remove variant from current map
                     oldCyclePlan.remove(rs.getString("VariantID")); //remove variant from old map
-                    ArrayList infoArray = new ArrayList();
-                    changedInfo.put(entry.getKey(), infoArray);
+
+                    // now loop through all non major columns and check for difference between variant in new and old cycle plan
+                    diffValues = new HashMap<String, String>();
+                    for (String s : infoArray) {
+                        if (!rs.getString(s).equals(entry.getValue().getValue(s))) {
+                            diffValues.put(s, rs.getString(s));
+                        }
+                    }
+
+                    changedInfo.put(entry.getKey(), diffValues); //Add information about differences between new and old variant
                 }
 
             } catch (Exception e) {
@@ -214,8 +267,8 @@ public class CompareDialogController implements Initializable {
         }
 
         // Open file selector and let user specify report file
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Information");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Information");
 
         //turn off gridlines
         sheet.setDisplayGridlines(false);
@@ -229,15 +282,26 @@ public class CompareDialogController implements Initializable {
         printSetup.setFitHeight((short) 1);
         printSetup.setFitWidth((short) 1);
 
+        // print out information about baseline cycle plan
         Row row = sheet.createRow(0);
         Cell cell = row.createCell(0);
-        cell.setCellValue("Baseline Cycle plan");
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        CellStyle style = workbook.createCellStyle();
+        style.setFont(headerFont);
+        cell.setCellStyle(style);
+        cell.setCellValue("Cycle plan:");
         cell = row.createCell(1);
         cell.setCellValue(CyclePlansController.selectedCyclePlan);
 
+        // print out information about comaparison cycle plan
         row = sheet.createRow(1);
         cell = row.createCell(0);
-        cell.setCellValue("Comparison Cycle plan");
+        headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        style.setFont(headerFont);
+        cell.setCellStyle(style);
+        cell.setCellValue("Compared to:");
         cell = row.createCell(1);
         cell.setCellValue(cyclePlanSelector.getSelectionModel().getSelectedItem().toString());
 
@@ -256,7 +320,7 @@ public class CompareDialogController implements Initializable {
         for (Iterator<Map.Entry<String, TableVariant>> entries = currentCyclePlan.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             row = sheet.createRow(rowNum);
-            amountOfColumns = writeRow(row, entry.getValue(), false, false);
+            amountOfColumns = writeRow(workbook, sheet, row, entry.getValue(), null, false, false);
 
             rowNum++;
         }
@@ -277,10 +341,15 @@ public class CompareDialogController implements Initializable {
         for (Iterator<Map.Entry<String, TableVariant>> entries = oldCyclePlan.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             row = sheet.createRow(rowNum);
-            writeRow(row, entry.getValue(), false, false);
+            amountOfColumns = writeRow(workbook, sheet, row, entry.getValue(), null, false, false);
 
             rowNum++;
         }
+        //autosize all columns
+        for (int i = 0; i < amountOfColumns; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        amountOfColumns = 0;
 
         // Write Changed variant information
         sheet = workbook.createSheet("Changed");
@@ -293,10 +362,15 @@ public class CompareDialogController implements Initializable {
         for (Iterator<Map.Entry<String, TableVariant>> entries = changedVariants.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             row = sheet.createRow(rowNum);
-            writeRow(row, entry.getValue(), true, false);
+            amountOfColumns = writeRow(workbook, sheet, row, entry.getValue(), changedInfo, true, false);
 
             rowNum++;
         }
+        //autosize all columns
+        for (int i = 0; i < amountOfColumns; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        amountOfColumns = 0;
 
         // Write Moved variant information
         sheet = workbook.createSheet("Moved");
@@ -308,11 +382,16 @@ public class CompareDialogController implements Initializable {
         for (Iterator<Map.Entry<String, TableVariant>> entries = movedVariants.entrySet().iterator(); entries.hasNext();) {
             Map.Entry<String, TableVariant> entry = entries.next();
             row = sheet.createRow(rowNum);
-            writeRow(row, entry.getValue(), false, true);
+            amountOfColumns = writeRow(workbook, sheet, row, entry.getValue(), null, false, true);
 
             rowNum++;
 
         }
+        //autosize all columns
+        for (int i = 0; i < amountOfColumns; i++) {
+            sheet.autoSizeColumn(i);
+        }
+        amountOfColumns = 0;
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Comparison Result File");
@@ -351,9 +430,11 @@ public class CompareDialogController implements Initializable {
 
     private void writeHeaders(Workbook wb, Row row, Boolean addOldSOP) {
         Cell cell = row.createCell(0);
-        CellStyle style = wb.createCellStyle();
+        XSSFCellStyle style = (XSSFCellStyle) wb.createCellStyle();
         Font headerFont = wb.createFont();
         headerFont.setBold(true);
+        style.setFillForegroundColor(new XSSFColor(new java.awt.Color(220, 220, 220)));
+        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         style.setFont(headerFont);
 
         cell.setCellStyle(style);
@@ -456,20 +537,62 @@ public class CompareDialogController implements Initializable {
         }
     }
 
-    private int writeRow(Row row, TableVariant variant, Boolean colorChanges, Boolean addOldSOP) {
+    private int writeRow(Workbook wb, Sheet sheet, Row row, TableVariant variant, Map<String, Map<String, String>> diffList, Boolean colorChanges, Boolean addOldSOP) {
+        XSSFCellStyle style = (XSSFCellStyle) wb.createCellStyle();
+        Map<String, String> differences;
+        if (diffList != null) {
+            differences = diffList.get(variant.getVariantID());
+        } else {
+            differences = new HashMap<String, String>();
+        }
         //headerFont.setColor(IndexedColors.RED.getIndex());
         int cols = 0;
 
         Cell cell = row.createCell(0);
+        if (differences.containsKey("Plant")) {
+            System.out.println("Plant changed");
+        }
         cell.setCellValue(variant.getPlant());
 
         cell = row.createCell(1);
+        if (differences.containsKey("Platform")) {
+            System.out.println("Platform changed");
+        }
         cell.setCellValue(variant.getPlatform());
 
         cell = row.createCell(2);
+        if (differences.containsKey("Vehicle")) {
+            System.out.println("Vehicle changed");
+        }
         cell.setCellValue(variant.getVehicle());
 
         cell = row.createCell(3);
+        XSSFFont font = (XSSFFont) wb.createFont();
+        if (differences.containsKey("Propulsion")) {
+            font.setColor(new XSSFColor(new java.awt.Color(255, 0, 0)));
+
+            // When the comment box is visible, have it show in a 1x3 space
+            CreationHelper factory = wb.getCreationHelper();
+            Drawing drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = factory.createClientAnchor();
+            anchor.setCol1(cell.getColumnIndex());
+            anchor.setCol2(cell.getColumnIndex() + 1);
+            anchor.setRow1(row.getRowNum());
+            anchor.setRow2(row.getRowNum() + 3);
+
+            // Create the comment and set the text+author
+            Comment comment = drawing.createCellComment(anchor);
+            RichTextString str = factory.createRichTextString(differences.get("Propulsion"));
+            comment.setString(str);
+            comment.setAuthor("RPT");
+
+            // Assign the comment to the cell
+            cell.setCellComment(comment);
+        } else {
+            font.setColor(new XSSFColor(new java.awt.Color(0, 0, 0)));
+        }
+        style.setFont(font);
+        cell.setCellStyle(style);
         cell.setCellValue(variant.getPropulsion());
 
         cell = row.createCell(4);
