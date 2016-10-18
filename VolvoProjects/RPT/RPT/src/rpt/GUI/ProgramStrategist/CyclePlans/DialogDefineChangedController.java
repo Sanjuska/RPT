@@ -107,6 +107,7 @@ public class DialogDefineChangedController implements Initializable {
                         buttonText.contains("Vehicle") ||
                         buttonText.contains("Denomination") ||
                         buttonText.contains("GearboxType") ||
+                        buttonText.contains("Generation") ||
                         buttonText.contains("EmissionClass");
                 if (preChecked) {
                     cb.requestFocus();
