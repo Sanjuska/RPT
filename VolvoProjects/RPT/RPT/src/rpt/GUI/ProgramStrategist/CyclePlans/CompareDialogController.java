@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,8 +18,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,12 +25,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -42,7 +36,6 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.PrintSetup;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
@@ -538,117 +531,169 @@ public class CompareDialogController implements Initializable {
     }
 
     private int writeRow(Workbook wb, Sheet sheet, Row row, TableVariant variant, Map<String, Map<String, String>> diffList, Boolean colorChanges, Boolean addOldSOP) {
-        XSSFCellStyle style = (XSSFCellStyle) wb.createCellStyle();
+        //Used for placing comment at the right position
+        CreationHelper factory = wb.getCreationHelper();
+        Drawing drawing = sheet.createDrawingPatriarch();
+        ClientAnchor anchor = factory.createClientAnchor();
+
+        //Create new style
+        XSSFCellStyle styleRed = (XSSFCellStyle) wb.createCellStyle();
+        XSSFCellStyle styleBlack = (XSSFCellStyle) wb.createCellStyle();
+        XSSFFont fontRed = (XSSFFont) wb.createFont();
+        fontRed.setColor(new XSSFColor(new java.awt.Color(255, 0, 0)));
+        XSSFFont fontBlack = (XSSFFont) wb.createFont(); 
+        fontBlack.setColor(new XSSFColor(new java.awt.Color(0, 0, 0)));
+        styleRed.setFont(fontRed);
+        styleBlack.setFont(fontBlack);
+        
+        //xEtract differences to highlight
         Map<String, String> differences;
+
         if (diffList != null) {
             differences = diffList.get(variant.getVariantID());
         } else {
             differences = new HashMap<String, String>();
         }
-        //headerFont.setColor(IndexedColors.RED.getIndex());
+
+        //Start with column 0
         int cols = 0;
 
-        Cell cell = row.createCell(0);
-        if (differences.containsKey("Plant")) {
-            System.out.println("Plant changed");
+        //Create string with columns to print
+        String[] columns = {"Plant", "Platform", "Vehicle", "Propulsion", "Denomination",
+            "Fuel", "EngineFamily", "Generation", "EngineCode", "Displacement",
+            "EnginePower", "ELMotorPower", "Torque", "TorqueOverBoost", "GearboxType",
+            "Gears", "Gearbox", "Driveline", "TransmissionCode", "EmissionClass",
+            "StartOfProd", "EndOfProd"};
+
+        Cell cell;
+        
+        for (int i = 0; i < columns.length; i++) {
+            cell = row.createCell(i);
+
+            if (differences.containsKey(columns[i])) {
+                cell.setCellStyle(styleRed);
+                
+                // position the comment
+                anchor.setCol1(cell.getColumnIndex());
+                anchor.setCol2(cell.getColumnIndex() + 1);
+                anchor.setRow1(row.getRowNum());
+                anchor.setRow2(row.getRowNum() + 3);
+
+                // Create the comment and set the text+author
+                Comment comment = drawing.createCellComment(anchor);
+                RichTextString str = factory.createRichTextString(differences.get(columns[i]));
+                comment.setString(str);
+                comment.setAuthor("RPT");
+
+                // Assign the comment to the cell
+                cell.setCellComment(comment);
+            } else {
+                cell.setCellStyle(styleBlack);
+            }
+            cell.setCellValue(variant.getValue(columns[i]));
         }
-        cell.setCellValue(variant.getPlant());
 
-        cell = row.createCell(1);
-        if (differences.containsKey("Platform")) {
-            System.out.println("Platform changed");
-        }
-        cell.setCellValue(variant.getPlatform());
-
-        cell = row.createCell(2);
-        if (differences.containsKey("Vehicle")) {
-            System.out.println("Vehicle changed");
-        }
-        cell.setCellValue(variant.getVehicle());
-
-        cell = row.createCell(3);
-        XSSFFont font = (XSSFFont) wb.createFont();
-        if (differences.containsKey("Propulsion")) {
-            font.setColor(new XSSFColor(new java.awt.Color(255, 0, 0)));
-
-            // When the comment box is visible, have it show in a 1x3 space
-            CreationHelper factory = wb.getCreationHelper();
-            Drawing drawing = sheet.createDrawingPatriarch();
-            ClientAnchor anchor = factory.createClientAnchor();
-            anchor.setCol1(cell.getColumnIndex());
-            anchor.setCol2(cell.getColumnIndex() + 1);
-            anchor.setRow1(row.getRowNum());
-            anchor.setRow2(row.getRowNum() + 3);
-
-            // Create the comment and set the text+author
-            Comment comment = drawing.createCellComment(anchor);
-            RichTextString str = factory.createRichTextString(differences.get("Propulsion"));
-            comment.setString(str);
-            comment.setAuthor("RPT");
-
-            // Assign the comment to the cell
-            cell.setCellComment(comment);
-        } else {
-            font.setColor(new XSSFColor(new java.awt.Color(0, 0, 0)));
-        }
-        style.setFont(font);
-        cell.setCellStyle(style);
-        cell.setCellValue(variant.getPropulsion());
-
-        cell = row.createCell(4);
-        cell.setCellValue(variant.getDenomination());
-
-        cell = row.createCell(5);
-        cell.setCellValue(Character.toString(variant.getFuel()));
-
-        cell = row.createCell(6);
-        cell.setCellValue(variant.getEngineFamily());
-
-        cell = row.createCell(7);
-        cell.setCellValue(variant.getGeneration());
-
-        cell = row.createCell(8);
-        cell.setCellValue(variant.getEngineCode());
-
-        cell = row.createCell(9);
-        cell.setCellValue(variant.getDisplacement());
-
-        cell = row.createCell(10);
-        cell.setCellValue(variant.getEnginePower());
-
-        cell = row.createCell(11);
-        cell.setCellValue(variant.getElMotorPower());
-
-        cell = row.createCell(12);
-        cell.setCellValue(variant.getTorque());
-
-        cell = row.createCell(13);
-        cell.setCellValue(variant.getTorqueOverBoost());
-
-        cell = row.createCell(14);
-        cell.setCellValue(Character.toString(variant.getGearBoxType()));
-
-        cell = row.createCell(15);
-        cell.setCellValue(variant.getGears());
-
-        cell = row.createCell(16);
-        cell.setCellValue(variant.getGearbox());
-
-        cell = row.createCell(17);
-        cell.setCellValue(variant.getDriveline());
-
-        cell = row.createCell(18);
-        cell.setCellValue(Character.toString(variant.getTransmissionCode()));
-
-        cell = row.createCell(19);
-        cell.setCellValue(variant.getEmissionClass());
-
-        cell = row.createCell(20);
-        cell.setCellValue(variant.getStartOfProd());
-
-        cell = row.createCell(21);
-        cell.setCellValue(variant.getEndOfProd());
-        cols = 22;
+//        Cell cell = row.createCell(0);
+//        if (differences.containsKey("Plant")) {
+//            System.out.println("Plant changed");
+//        }
+//        cell.setCellValue(variant.getPlant());
+//
+//        cell = row.createCell(1);
+//        if (differences.containsKey("Platform")) {
+//            System.out.println("Platform changed");
+//        }
+//        cell.setCellValue(variant.getPlatform());
+//
+//        cell = row.createCell(2);
+//        if (differences.containsKey("Vehicle")) {
+//            System.out.println("Vehicle changed");
+//        }
+//        cell.setCellValue(variant.getVehicle());
+//
+//        cell = row.createCell(3);
+//        XSSFFont font = (XSSFFont) wb.createFont();
+//        if (differences.containsKey("Propulsion")) {
+//            font.setColor(new XSSFColor(new java.awt.Color(255, 0, 0)));
+//
+//            // When the comment box is visible, have it show in a 1x3 space
+//            CreationHelper factory = wb.getCreationHelper();
+//            Drawing drawing = sheet.createDrawingPatriarch();
+//            ClientAnchor anchor = factory.createClientAnchor();
+//            anchor.setCol1(cell.getColumnIndex());
+//            anchor.setCol2(cell.getColumnIndex() + 1);
+//            anchor.setRow1(row.getRowNum());
+//            anchor.setRow2(row.getRowNum() + 3);
+//
+//            // Create the comment and set the text+author
+//            Comment comment = drawing.createCellComment(anchor);
+//            RichTextString str = factory.createRichTextString(differences.get("Propulsion"));
+//            comment.setString(str);
+//            comment.setAuthor("RPT");
+//
+//            // Assign the comment to the cell
+//            cell.setCellComment(comment);
+//        } else {
+//            font.setColor(new XSSFColor(new java.awt.Color(0, 0, 0)));
+//        }
+//        style.setFont(font);
+//        cell.setCellStyle(style);
+//        cell.setCellValue(variant.getPropulsion());
+//
+//        cell = row.createCell(4);
+//        cell.setCellValue(variant.getDenomination());
+//
+//        cell = row.createCell(5);
+//        cell.setCellValue(Character.toString(variant.getFuel()));
+//
+//        cell = row.createCell(6);
+//        cell.setCellValue(variant.getEngineFamily());
+//
+//        cell = row.createCell(7);
+//        cell.setCellValue(variant.getGeneration());
+//
+//        cell = row.createCell(8);
+//        cell.setCellValue(variant.getEngineCode());
+//
+//        cell = row.createCell(9);
+//        cell.setCellValue(variant.getDisplacement());
+//
+//        cell = row.createCell(10);
+//        cell.setCellValue(variant.getEnginePower());
+//
+//        cell = row.createCell(11);
+//        cell.setCellValue(variant.getElMotorPower());
+//
+//        cell = row.createCell(12);
+//        cell.setCellValue(variant.getTorque());
+//
+//        cell = row.createCell(13);
+//        cell.setCellValue(variant.getTorqueOverBoost());
+//
+//        cell = row.createCell(14);
+//        cell.setCellValue(Character.toString(variant.getGearBoxType()));
+//
+//        cell = row.createCell(15);
+//        cell.setCellValue(variant.getGears());
+//
+//        cell = row.createCell(16);
+//        cell.setCellValue(variant.getGearbox());
+//
+//        cell = row.createCell(17);
+//        cell.setCellValue(variant.getDriveline());
+//
+//        cell = row.createCell(18);
+//        cell.setCellValue(Character.toString(variant.getTransmissionCode()));
+//
+//        cell = row.createCell(19);
+//        cell.setCellValue(variant.getEmissionClass());
+//
+//        cell = row.createCell(20);
+//        cell.setCellValue(variant.getStartOfProd());
+//
+//        cell = row.createCell(21);
+//        cell.setCellValue(variant.getEndOfProd());
+//        cols = 22;
 
         if (addOldSOP) {
             cell = row.createCell(22);
