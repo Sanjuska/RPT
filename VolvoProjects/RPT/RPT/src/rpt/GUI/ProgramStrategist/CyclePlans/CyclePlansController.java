@@ -475,6 +475,8 @@ public class CyclePlansController implements Initializable {
         removeButton.setTooltip(new Tooltip("Remove selected items"));
         saveButton.setTooltip(new Tooltip("Save"));
         
+        // empty cycle plan list in case one arrives from other view
+        cyclePlanList.clear();
         //populate cycle plan list
         try{
             Statement statement = RPT.conn.createStatement();
