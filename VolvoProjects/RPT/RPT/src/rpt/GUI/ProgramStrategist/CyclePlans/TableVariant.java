@@ -27,7 +27,7 @@ public class TableVariant {
     private String vehicle;
     private String platform;
     private String propulsion;
-    private char fuel;
+    private String fuel;
     private String engineFamily;
     private String generation;
     private String engineCode;
@@ -36,10 +36,10 @@ public class TableVariant {
     private String elMotorPower;
     private String torque;
     private String torqueOverBoost;
-    private char gearBoxType;
+    private String gearboxType;
     private String gears;
     private String driveline;
-    private char transmissionCode;
+    private String transmissionCode;
     private String emissionClass;
     private String startOfProd;
     private String endOfProd;
@@ -56,7 +56,7 @@ public class TableVariant {
         this.vehicle = "";
         this.platform = "";
         this.propulsion = "";
-        this.fuel = Character.MIN_VALUE;
+        this.fuel = "";
         this.engineFamily = "";
         this.generation = "1";
         this.engineCode = "";
@@ -65,20 +65,20 @@ public class TableVariant {
         this.elMotorPower = "0";
         this.torque = "0";
         this.torqueOverBoost = "0";
-        this.gearBoxType = Character.MIN_VALUE;
+        this.gearboxType = "";
         this.gears = "0";
         this.driveline = "";
-        this.transmissionCode = Character.MIN_VALUE;
+        this.transmissionCode = "";
         this.emissionClass = "";
         this.startOfProd = "";
         this.endOfProd = "";
     }
 
     public TableVariant(String plant, String platform, String vehicle, String propulsion,
-            String denomination, char fuel, String engineFamily, String generation,
+            String denomination, String fuel, String engineFamily, String generation,
             String engineName, String engineCode, String displacement, String enginePower,
-            String elMotorPower, String torque, String torqueOverBoost, char gearBoxType,
-            String gears, String gearbox, String driveline, char transmissionCode,
+            String elMotorPower, String torque, String torqueOverBoost, String gearboxType,
+            String gears, String gearbox, String driveline, String transmissionCode, String certGroup,
             String emissionClass, String startOfProd, String endOfProd) {
         this.variantID = vehicle + engineCode + transmissionCode + emissionClass + startOfProd;
         this.plant = plant;
@@ -96,11 +96,12 @@ public class TableVariant {
         this.elMotorPower = elMotorPower;
         this.torque = torque;
         this.torqueOverBoost = torqueOverBoost;
-        this.gearBoxType = gearBoxType;
+        this.gearboxType = gearboxType;
         this.gears = gears;
         this.gearbox = gearbox;
         this.driveline = driveline;
         this.transmissionCode = transmissionCode;
+        this.certGroup = certGroup;
         this.emissionClass = emissionClass;
         this.startOfProd = startOfProd;
         this.endOfProd = endOfProd;
@@ -180,11 +181,11 @@ public class TableVariant {
         this.propulsion = propulsion;
     }
 
-    public char getFuel() {
+    public String getFuel() {
         return fuel;
     }
 
-    public void setFuel(char fuel) {
+    public void setFuel(String fuel) {
         this.fuel = fuel;
     }
 
@@ -252,12 +253,12 @@ public class TableVariant {
         this.torqueOverBoost = torqueOverBoost;
     }
 
-    public char getGearBoxType() {
-        return gearBoxType;
+    public String getGearboxType() {
+        return gearboxType;
     }
 
-    public void setGearBoxType(char gearBoxType) {
-        this.gearBoxType = gearBoxType;
+    public void setGearboxType(String gearboxType) {
+        this.gearboxType = gearboxType;
     }
 
     public String getGears() {
@@ -276,11 +277,11 @@ public class TableVariant {
         this.driveline = driveline;
     }
 
-    public char getTransmissionCode() {
+    public String getTransmissionCode() {
         return transmissionCode;
     }
 
-    public void setTransmissionCode(char transmissionCode) {
+    public void setTransmissionCode(String transmissionCode) {
         this.transmissionCode = transmissionCode;
     }
 
@@ -346,7 +347,8 @@ public class TableVariant {
                 setDenomination((String) input);
                 break;
             case "Fuel":
-                setFuel(input.toString().charAt(0));
+                //setFuel(input.toString().charAt(0));
+                setFuel((String) input);
                 break;
             case "Engine Family":
                 setEngineFamily((String) input);
@@ -385,7 +387,7 @@ public class TableVariant {
                 setTorqueOverBoost((String) input);
                 break;
             case "Gearbox type":
-                setGearBoxType(input.toString().charAt(0));
+                setGearboxType((String) input);
                 break;
             case "Gears":
                 //doubleVal = (Double) input;
@@ -400,7 +402,11 @@ public class TableVariant {
                 setDriveline((String) input);
                 break;
             case "Transm Code":
-                setTransmissionCode(input.toString().charAt(0));
+                //setTransmissionCode(input.toString().charAt(0));
+                setTransmissionCode((String) input);
+                break;
+            case "CertGroup":
+                setCertGroup((String) input);
                 break;
             case "Emiss":
                 setEmissionClass((String) input);
@@ -440,7 +446,8 @@ public class TableVariant {
             case "Denomination":
                 return denomination;
             case "Fuel":
-                return Character.toString(fuel);
+                //return Character.toString(fuel);
+                return fuel;
             case "EngineFamily":
                 return engineFamily;
             case "Generation":
@@ -451,14 +458,15 @@ public class TableVariant {
                 return displacement;
             case "EnginePower":
                 return enginePower;
-            case "ELMotorPower":
+            case "ElMotorPower":
                 return elMotorPower;
             case "Torque":
                 return torque;
             case "TorqueOverBoost":
                 return torqueOverBoost;
             case "GearboxType":
-                return Character.toString(gearBoxType);
+                //return Character.toString(gearboxType);
+                return gearboxType;
             case "Gears":
                 return gears;
             case "Gearbox":
@@ -466,7 +474,10 @@ public class TableVariant {
             case "Driveline":
                 return driveline;
             case "TransmissionCode":
-                return Character.toString(transmissionCode);
+                //return Character.toString(transmissionCode);
+                return transmissionCode;
+            case "CertGroup":
+                return certGroup;
             case "EmissionClass":
                 return emissionClass;
             case "StartOfProd":

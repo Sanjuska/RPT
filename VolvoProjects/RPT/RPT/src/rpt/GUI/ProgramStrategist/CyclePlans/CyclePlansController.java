@@ -5,26 +5,25 @@
  */
 package rpt.GUI.ProgramStrategist.CyclePlans;
 
-import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
+import com.sun.javafx.scene.control.skin.TableViewSkin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
 import java.util.ResourceBundle;
-import javafx.beans.property.Property;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,25 +32,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SelectionModel;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -102,16 +93,18 @@ public class CyclePlansController implements Initializable {
     private Button compareButton;
     @FXML
     private Button exportButton;
-    
-    
+
     public static String selectedSheet = null;
     public static String importedCyclePlanName = null;
     public static String selectedCyclePlan = null;
     public static String[] defineChanged = null;
-    
+    private ArrayList<TableColumn<TableVariant, String>> columnList;
+
     public static List sheetsInFile = null;
 
     private String query = "";
+
+    private Boolean columnsAdded;
 
     public static List getSheets() {
         return sheetsInFile;
@@ -124,11 +117,7 @@ public class CyclePlansController implements Initializable {
         return data;
     }
     // ObservableList object enables the tracking of any changes to its elements
-    private static ObservableList<TableVariant> data = FXCollections.observableArrayList(
-            //new TableVariant("Torslanda", "SPA", "V526", "ICE", "T6", 'G', "VEP4 HP",
-            //        "1", "B4204T27", "A2", "2.0", "320", "0", "400", "0", 'A', "8", "AWF22",
-            //        "AWD", 'C', "Euro6b", "15w05", "17w17")
-    );
+    private static ObservableList<TableVariant> data = FXCollections.observableArrayList();
 
     //Add entry into table
     public static void add(TableVariant entry) {
@@ -157,53 +146,75 @@ public class CyclePlansController implements Initializable {
         removeVariants = tableVariants.getSelectionModel().getSelectedItems();
         tableVariants.getItems().removeAll(removeVariants);
     }
-    
-    public void cyclePlanSelected(){
-        System.out.println(cyclePlanSelector.getSelectionModel().getSelectedItem().toString());
+
+    public void cyclePlanSelected() {
+        // Set cycle plan name to whatever was elected in the comboBox
         selectedCyclePlan = cyclePlanSelector.getSelectionModel().getSelectedItem().toString();
-        try{
+
+        try {
             Statement statement = RPT.conn.createStatement();
             statement.setQueryTimeout(30);
+            // Extract column names from database if no columns exist in the table view
+            if (tableVariants.getColumns().isEmpty()) {
+                String query = "PRAGMA table_info(VARIANTS)"; //Get all column names
+                ResultSet rsColumns = statement.executeQuery(query);
+
+                while (rsColumns.next()) {
+                    TableColumn<TableVariant, String> column = new TableColumn<TableVariant, String>(rsColumns.getString("name"));
+                    column.setCellValueFactory(new PropertyValueFactory<>(rsColumns.getString("name")));
+                    column.setCellFactory(TextFieldTableCell.forTableColumn());
+                    column.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<TableVariant, String> event) {
+                            ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineName(event.getNewValue());
+                        }
+                    });
+
+                    tableVariants.getColumns().add(column);
+
+                }
+            }
+            // Read variants and add to table
             query = "SELECT * FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
                     + "VariantBelongsToCyclePlan.CyclePlanID= \'" + selectedCyclePlan + "\' AND VARIANTS.VariantID = VariantBelongsToCyclePlan.VariantID";
             ResultSet rs = statement.executeQuery(query);
-            
+
             data.clear();
-            
-            while (rs.next()){
+
+            while (rs.next()) {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
-                            rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
-                            rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
-                            "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
-                            rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType").charAt(0),
-                            rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
-                            rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
-                    add(entry);
+                        rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
+                        rs.getString("Denomination"), rs.getString("Fuel"), rs.getString("EngineFamily"), rs.getString("Generation"),
+                        "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
+                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType"),
+                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode"),
+                        rs.getString("certGroup"), rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
+                add(entry);
             }
+
             cyclePlanSelector.setItems(cyclePlanList);
-        }
-        catch (Exception e) {
-            System.err.println("CyclePlansController line 181: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("CyclePlansController cyclePlanSelected(): " + e.getMessage());
         }
     }
-    
-    public void compareButtonClicked() throws IOException{
+
+    public void compareButtonClicked() throws IOException {
         Stage stage;
         Parent root;
         stage = new Stage();
         root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/CompareDialog.fxml"));
         stage.setScene(new Scene(root));
-        stage.setTitle("Add gate");
+        stage.setTitle("Select Cycle Plan for comparison");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(compareButton.getScene().getWindow());
         stage.showAndWait();
-        
+
     }
 
-    public void exportButtonClicked(){
+    public void exportButtonClicked() {
         System.out.println("exporting");
     }
-    
+
     private Object getCellValue(Cell cell) {
         switch (cell.getCellType()) {
             case Cell.CELL_TYPE_STRING:
@@ -222,7 +233,7 @@ public class CyclePlansController implements Initializable {
     //Import button action handler
     public void importButtonClicked(ActionEvent event) throws IOException {
         //List with all variants read from the imported Excel file
-        List<Variant> variants = new ArrayList();
+        List<TableVariant> variants = new ArrayList();
 
         //Create File Chooser window
         FileChooser fileChooser = new FileChooser();
@@ -335,7 +346,7 @@ public class CyclePlansController implements Initializable {
                     while (rowIterator.hasNext()) {
                         Row nextRow = rowIterator.next();
                         cellIterator = nextRow.cellIterator();
-                        Variant aVariant = new Variant();
+                        TableVariant aVariant = new TableVariant();
                         //loop through all columns in the row
                         while (cellIterator.hasNext()) {
                             nextCell = cellIterator.next();
@@ -350,19 +361,19 @@ public class CyclePlansController implements Initializable {
                         variants.add(aVariant);
                     }
                 } catch (Exception e) {
-                    System.err.println("CyclePlansController line 343: " +e.getMessage());
+                    System.err.println("CyclePlansController line 343: " + e.getMessage());
                 }
-                
+
                 //remove current selection and add the new variants
                 data.clear();
                 int index = 1;
-                for (Variant variant : variants) {
+                for (TableVariant variant : variants) {
                     TableVariant entry = new TableVariant(variant.getPlant(),
                             variant.getPlatform(), variant.getVehicle(), variant.getPropulsion(),
                             variant.getDenomination(), variant.getFuel(), variant.getEngineFamily(), variant.getGeneration(),
                             variant.getEngineName(), variant.getEngineCode(), variant.getDisplacement(), variant.getEnginePower(),
-                            variant.getElMotorPower(), variant.getTorque(), variant.getTorqueOverBoost(), variant.getGearBoxType(),
-                            variant.getGears(), variant.getGearbox(), variant.getDriveline(), variant.getTransmissionCode(),
+                            variant.getElMotorPower(), variant.getTorque(), variant.getTorqueOverBoost(), variant.getGearboxType(),
+                            variant.getGears(), variant.getGearbox(), variant.getDriveline(), variant.getTransmissionCode(), variant.getCertGroup(),
                             variant.getEmissionClass(), variant.getStartOfProd(), variant.getEndOfProd());
                     add(entry);
                     index++;
@@ -390,27 +401,26 @@ public class CyclePlansController implements Initializable {
                                     + variant.getPlant() + "\', \'" + variant.getPlatform() + "\', \'" + variant.getVehicle() + "\', \'" + variant.getPropulsion() + "\', \'"
                                     + variant.getDenomination() + "\', \'" + variant.getFuel() + "\', \'" + variant.getEngineFamily() + "\', \'" + variant.getGeneration() + "\', \'"
                                     + variant.getEngineCode() + "\', \'" + variant.getDisplacement() + "\', \'" + variant.getEnginePower() + "\', \'" + variant.getElMotorPower()
-                                    + "\', \'" + variant.getTorque() + "\', \'" + variant.getTorqueOverBoost() + "\', \'" + variant.getGearBoxType() + "\', \'" + variant.getGears() + "', '"
+                                    + "\', \'" + variant.getTorque() + "\', \'" + variant.getTorqueOverBoost() + "\', \'" + variant.getGearboxType() + "\', \'" + variant.getGears() + "', '"
                                     + variant.getGearbox() + "\', \'" + variant.getDriveline() + "\', \'" + variant.getTransmissionCode() + "\', \'" + variant.getCertGroup() + "\', \'"
                                     + variant.getEmissionClass() + "\', \'" + variant.getStartOfProd() + "\', \'" + variant.getEndOfProd() + "\', \'" + variantID
                                     + "\')";
                             statement.executeUpdate(query);
                         }
                         // Add connection between cycle plan and variant
-                        
+
                         query = "INSERT INTO VariantBelongsToCyclePlan (VariantID, CyclePlanID) VALUES (\'" + variantID + "\', \'" + importedCyclePlanName + "\')";
                         statement.executeUpdate(query);
 
                     } catch (Exception e) {
                         System.out.println("Query: " + query);
-                        System.err.println("CyclePlansController line 394: " +e.getMessage());
+                        System.err.println("CyclePlansController line 394: " + e.getMessage());
                     }
                 }
                 cyclePlanList.add(importedCyclePlanName);
                 cyclePlanSelector.getSelectionModel().select(importedCyclePlanName);
             }// end of reading file after user has selected sheet and name of cycle plan
             inputStream.close();
-            
 
         }
     }
@@ -419,54 +429,54 @@ public class CyclePlansController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         tableVariants.setEditable(true);
         // specify a cell factory for each column
-        variantID.setCellValueFactory(new PropertyValueFactory<>("variantID"));
-        variantID.setEditable(false);
-
-        //specify a cell factory  and enable it editable
-        engineName.setCellValueFactory(new PropertyValueFactory<>("engineName"));
-        engineName.setCellFactory(TextFieldTableCell.forTableColumn());
-        engineName.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-            @Override
-            public void handle(CellEditEvent<TableVariant, String> event) {
-                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineName(event.getNewValue());
-            }
-        });
-        //specify a cell factory  and enable it editable
-        denomination.setCellValueFactory(new PropertyValueFactory<>("denomination"));
-        denomination.setCellFactory(TextFieldTableCell.forTableColumn());
-        engineName.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-            @Override
-            public void handle(CellEditEvent<TableVariant, String> event) {
-                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setDenomination(event.getNewValue());
-            }
-        });
-        //specify a cell factory  and enable it editable
-        gearbox.setCellValueFactory(new PropertyValueFactory<>("gearbox"));
-        gearbox.setCellFactory(TextFieldTableCell.forTableColumn());
-        gearbox.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-            @Override
-            public void handle(CellEditEvent<TableVariant, String> event) {
-                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setGearbox(event.getNewValue());
-            }
-        });
-        //specify a cell factory  and enable it editable
-        emissionsCategory.setCellValueFactory(new PropertyValueFactory<>("emissionClass"));
-        emissionsCategory.setCellFactory(TextFieldTableCell.forTableColumn());
-        emissionsCategory.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-            @Override
-            public void handle(CellEditEvent<TableVariant, String> event) {
-                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());
-            }
-        });
-        //specify a cell factory  and enable it editable
-        generation.setCellValueFactory(new PropertyValueFactory<>("generation"));
-        generation.setCellFactory(TextFieldTableCell.forTableColumn());
-        generation.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-            @Override
-            public void handle(CellEditEvent<TableVariant, String> event) {
-                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());
-            }
-        });
+//        variantID.setCellValueFactory(new PropertyValueFactory<>("variantID"));
+//        variantID.setEditable(false);
+//
+//        //specify a cell factory  and enable it editable
+//        engineName.setCellValueFactory(new PropertyValueFactory<>("engineName"));
+//        engineName.setCellFactory(TextFieldTableCell.forTableColumn());
+//        engineName.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+//            @Override
+//            public void handle(CellEditEvent<TableVariant, String> event) {
+//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineName(event.getNewValue());
+//            }
+//        });
+//        //specify a cell factory  and enable it editable
+//        denomination.setCellValueFactory(new PropertyValueFactory<>("denomination"));
+//        denomination.setCellFactory(TextFieldTableCell.forTableColumn());
+//        engineName.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+//            @Override
+//            public void handle(CellEditEvent<TableVariant, String> event) {
+//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setDenomination(event.getNewValue());
+//            }
+//        });
+//        //specify a cell factory  and enable it editable
+//        gearbox.setCellValueFactory(new PropertyValueFactory<>("gearbox"));
+//        gearbox.setCellFactory(TextFieldTableCell.forTableColumn());
+//        gearbox.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+//            @Override
+//            public void handle(CellEditEvent<TableVariant, String> event) {
+//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setGearbox(event.getNewValue());
+//            }
+//        });
+//        //specify a cell factory  and enable it editable
+//        emissionsCategory.setCellValueFactory(new PropertyValueFactory<>("emissionClass"));
+//        emissionsCategory.setCellFactory(TextFieldTableCell.forTableColumn());
+//        emissionsCategory.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+//            @Override
+//            public void handle(CellEditEvent<TableVariant, String> event) {
+//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());
+//            }
+//        });
+//        //specify a cell factory  and enable it editable
+//        generation.setCellValueFactory(new PropertyValueFactory<>("generation"));
+//        generation.setCellFactory(TextFieldTableCell.forTableColumn());
+//        generation.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+//            @Override
+//            public void handle(CellEditEvent<TableVariant, String> event) {
+//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());
+//            }
+//        });
         //Push into the table
         tableVariants.setItems(data);
 
@@ -474,24 +484,24 @@ public class CyclePlansController implements Initializable {
         addButton.setTooltip(new Tooltip("Add new item"));
         removeButton.setTooltip(new Tooltip("Remove selected items"));
         saveButton.setTooltip(new Tooltip("Save"));
-        
+
         // empty cycle plan list in case one arrives from other view
         cyclePlanList.clear();
         //populate cycle plan list
-        try{
+        try {
             Statement statement = RPT.conn.createStatement();
             statement.setQueryTimeout(30);
             query = "SELECT Name FROM CYCLEPLANS";
             ResultSet rs = statement.executeQuery(query);
-            
-            while (rs.next()){
-               cyclePlanList.add(rs.getString(1)); 
+
+            while (rs.next()) {
+                cyclePlanList.add(rs.getString(1));
             }
             cyclePlanSelector.setItems(cyclePlanList);
+        } catch (Exception e) {
+            System.err.println("CyclePlansController line 470: " + e.getMessage());
         }
-        catch (Exception e) {
-            System.err.println("CyclePlansController line 470: " +e.getMessage());
-        }
+
     }
 
 }

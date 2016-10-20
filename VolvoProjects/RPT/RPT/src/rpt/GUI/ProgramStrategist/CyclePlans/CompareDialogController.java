@@ -90,11 +90,11 @@ public class CompareDialogController implements Initializable {
             while (rs.next()) {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                         rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
-                        rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
+                        rs.getString("Denomination"), rs.getString("Fuel"), rs.getString("EngineFamily"), rs.getString("Generation"),
                         "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
-                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType").charAt(0),
-                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
-                        rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
+                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType"),
+                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode"),
+                        rs.getString("CertGroup"), rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
                 currentCyclePlan.put(entry.getVariantID(), entry);
             }
             //Now extract all variants in the cycleplan to compare with
@@ -108,11 +108,11 @@ public class CompareDialogController implements Initializable {
             while (rs.next()) {
                 TableVariant entry = new TableVariant(rs.getString("Plant"),
                         rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
-                        rs.getString("Denomination"), rs.getString("Fuel").charAt(0), rs.getString("EngineFamily"), rs.getString("Generation"),
+                        rs.getString("Denomination"), rs.getString("Fuel"), rs.getString("EngineFamily"), rs.getString("Generation"),
                         "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
-                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType").charAt(0),
-                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode").charAt(0),
-                        rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
+                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType"),
+                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode"),
+                        rs.getString("CertGroup"), rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
                 oldCyclePlan.put(entry.getVariantID(), entry);
             }
 
@@ -136,7 +136,7 @@ public class CompareDialogController implements Initializable {
                 statement = RPT.conn.createStatement();
                 statement.setQueryTimeout(30);
                 //TODO
-                //Add all columns except Star of production, as all will be important to find it correctly
+                //Add all columns except Start of production, as all will be important to find it correctly
                 String query = "SELECT VARIANTS.VariantID, VARIANTS.StartOfProd, VARIANTS.EndOfProd FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
                         + "VARIANTS.VariantID = VariantBelongsToCyclePlan.VariantID AND "
                         + "VariantBelongsToCyclePlan.CyclePlanID= \'" + cyclePlanSelector.getSelectionModel().getSelectedItem().toString() + "\' AND "
@@ -153,12 +153,12 @@ public class CompareDialogController implements Initializable {
                         + "VARIANTS.EnginePower = \'" + entry.getValue().getEnginePower() + "\' AND "
                         + "VARIANTS.ElMotorPower = \'" + entry.getValue().getElMotorPower() + "\' AND "
                         + "VARIANTS.TorqueOverBoost = \'" + entry.getValue().getTorqueOverBoost() + "\' AND "
-                        + "VARIANTS.GearboxType = \'" + entry.getValue().getGearBoxType() + "\' AND "
+                        + "VARIANTS.GearboxType = \'" + entry.getValue().getGearboxType() + "\' AND "
                         + "VARIANTS.Gears = \'" + entry.getValue().getGears() + "\' AND "
                         + "VARIANTS.Gearbox = \'" + entry.getValue().getGearbox() + "\' AND "
                         + "VARIANTS.Driveline = \'" + entry.getValue().getDriveline() + "\' AND "
                         + "VARIANTS.TransmissionCode = \'" + entry.getValue().getTransmissionCode() + "\' AND "
-                        //+ "VARIANTS.CertGroup = \'" + entry.getValue().getCertGroup() + "\' AND " // ignore this, not really used
+                        + "VARIANTS.CertGroup = \'" + entry.getValue().getCertGroup() + "\' AND " // may remove once
                         + "VARIANTS.EmissionClass = \'" + entry.getValue().getEmissionClass() + "\'";
                 ResultSet rs = statement.executeQuery(query);
                 if (rs.next()) {
@@ -182,7 +182,7 @@ public class CompareDialogController implements Initializable {
         stage = new Stage();
         root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/dialogDefineChanged.fxml"));
         stage.setScene(new Scene(root));
-        stage.setTitle("Set change dfinition");
+        stage.setTitle("Set change definition");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait(); // pause until the user has selected minor changes
 
@@ -507,24 +507,28 @@ public class CompareDialogController implements Initializable {
 
         cell = row.createCell(19);
         cell.setCellStyle(style);
-        cell.setCellValue("Emission Class");
+        cell.setCellValue("Cert Group");
 
         cell = row.createCell(20);
         cell.setCellStyle(style);
-        cell.setCellValue("SOP");
+        cell.setCellValue("Emission Class");
 
         cell = row.createCell(21);
+        cell.setCellStyle(style);
+        cell.setCellValue("SOP");
+
+        cell = row.createCell(22);
         cell.setCellStyle(style);
         cell.setCellValue("EOP");
 
         if (addOldSOP) {
-            cell = row.createCell(22);
+            cell = row.createCell(23);
             cell.setCellStyle(style);
             cell.setCellValue("Old SOP");
         }
 
         if (addOldSOP) { //Same boolean flag
-            cell = row.createCell(23);
+            cell = row.createCell(24);
             cell.setCellStyle(style);
             cell.setCellValue("Old EOP");
         }
@@ -541,11 +545,11 @@ public class CompareDialogController implements Initializable {
         XSSFCellStyle styleBlack = (XSSFCellStyle) wb.createCellStyle();
         XSSFFont fontRed = (XSSFFont) wb.createFont();
         fontRed.setColor(new XSSFColor(new java.awt.Color(255, 0, 0)));
-        XSSFFont fontBlack = (XSSFFont) wb.createFont(); 
+        XSSFFont fontBlack = (XSSFFont) wb.createFont();
         fontBlack.setColor(new XSSFColor(new java.awt.Color(0, 0, 0)));
         styleRed.setFont(fontRed);
         styleBlack.setFont(fontBlack);
-        
+
         //xEtract differences to highlight
         Map<String, String> differences;
 
@@ -561,18 +565,18 @@ public class CompareDialogController implements Initializable {
         //Create string with columns to print
         String[] columns = {"Plant", "Platform", "Vehicle", "Propulsion", "Denomination",
             "Fuel", "EngineFamily", "Generation", "EngineCode", "Displacement",
-            "EnginePower", "ELMotorPower", "Torque", "TorqueOverBoost", "GearboxType",
-            "Gears", "Gearbox", "Driveline", "TransmissionCode", "EmissionClass",
+            "EnginePower", "ElMotorPower", "Torque", "TorqueOverBoost", "GearboxType",
+            "Gears", "Gearbox", "Driveline", "TransmissionCode", "CertGroup", "EmissionClass",
             "StartOfProd", "EndOfProd"};
 
         Cell cell;
-        
+
         for (int i = 0; i < columns.length; i++) {
             cell = row.createCell(i);
 
             if (differences.containsKey(columns[i])) {
                 cell.setCellStyle(styleRed);
-                
+
                 // position the comment
                 anchor.setCol1(cell.getColumnIndex());
                 anchor.setCol2(cell.getColumnIndex() + 1);
@@ -591,6 +595,7 @@ public class CompareDialogController implements Initializable {
                 cell.setCellStyle(styleBlack);
             }
             cell.setCellValue(variant.getValue(columns[i]));
+            cols++;
         }
 
 //        Cell cell = row.createCell(0);
@@ -694,15 +699,14 @@ public class CompareDialogController implements Initializable {
 //        cell = row.createCell(21);
 //        cell.setCellValue(variant.getEndOfProd());
 //        cols = 22;
-
         if (addOldSOP) {
-            cell = row.createCell(22);
+            cell = row.createCell(23);
             cell.setCellValue(variant.getOldSOP());
             cols++;
         }
 
         if (addOldSOP) {
-            cell = row.createCell(23);
+            cell = row.createCell(24);
             cell.setCellValue(variant.getOldEOP());
             cols++;
         }
