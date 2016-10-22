@@ -64,21 +64,21 @@ public class CyclePlansController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    //Define table and buttons
+    //Define table and buttons from FXML
     @FXML
     public TableView<TableVariant> tableVariants;
-    @FXML
-    public TableColumn<TableVariant, Integer> variantID;
-    @FXML
-    public TableColumn<TableVariant, String> engineName;
-    @FXML
-    public TableColumn<TableVariant, String> denomination;
-    @FXML
-    public TableColumn<TableVariant, String> gearbox;
-    @FXML
-    public TableColumn<TableVariant, String> emissionsCategory;
-    @FXML
-    public TableColumn<TableVariant, String> generation;
+    //@FXML
+    //public TableColumn<TableVariant, Integer> variantID;
+    //@FXML
+    //public TableColumn<TableVariant, String> engineName;
+    //@FXML
+    //public TableColumn<TableVariant, String> denomination;
+    //@FXML
+    //public TableColumn<TableVariant, String> gearbox;
+    //@FXML
+    //public TableColumn<TableVariant, String> emissionsCategory;
+    //@FXML
+    //public TableColumn<TableVariant, String> generation;
     @FXML
     private Button addButton;
     @FXML
@@ -93,29 +93,35 @@ public class CyclePlansController implements Initializable {
     private Button compareButton;
     @FXML
     private Button exportButton;
+    @FXML
+    private Button filterButton;
+    @FXML
+    private Button settingsButton;
 
+    // Declare public static variables used for communication from outside the class
     public static String selectedSheet = null;
     public static String importedCyclePlanName = null;
     public static String selectedCyclePlan = null;
     public static String[] defineChanged = null;
     private ArrayList<TableColumn<TableVariant, String>> columnList;
-
     public static List sheetsInFile = null;
+    public static ArrayList<String> visibleColumns = new ArrayList();
 
+    // variable used for storing SQL queries
     private String query = "";
 
-    private Boolean columnsAdded;
-
+    //Allows external classes to check sheets from the file read in the import
+    //function of this class
+    //TODO
+    //move the entire import function to seperate class EXCEL IMPORTER
+    //this then becomes useless as it will be part of that class
     public static List getSheets() {
         return sheetsInFile;
     }
 
+    //Observable list containing the cycle plans in the combo box
     public static ObservableList<String> cyclePlanList = FXCollections.observableArrayList();
 
-    //Create table's data, get all of the items
-    public static ObservableList<TableVariant> getVariants() {
-        return data;
-    }
     // ObservableList object enables the tracking of any changes to its elements
     private static ObservableList<TableVariant> data = FXCollections.observableArrayList();
 
@@ -124,6 +130,13 @@ public class CyclePlansController implements Initializable {
         data.add(entry);
     }
 
+    //Returns what is currently being presented in the variant table
+    public static ObservableList<TableVariant> getVariants() {
+        return data;
+    }
+
+    //** BUTTON ACTION HANDLERS ** //
+    //Left to right as they appear
     //Add button action handler
     public void addButtonClicked(ActionEvent event) throws IOException {
         Stage stage;
@@ -147,6 +160,13 @@ public class CyclePlansController implements Initializable {
         tableVariants.getItems().removeAll(removeVariants);
     }
 
+    // Save button action handler
+    public void saveButtonClickes() {
+        // does nothing for now, should save a new version of the selected cycle plan
+        // i.e. update the relations between cycle plan and variants.
+    }
+
+    // Cycle plan combobox action handler
     public void cyclePlanSelected() {
         // Set cycle plan name to whatever was elected in the comboBox
         selectedCyclePlan = cyclePlanSelector.getSelectionModel().getSelectedItem().toString();
@@ -169,9 +189,11 @@ public class CyclePlansController implements Initializable {
                             ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineName(event.getNewValue());
                         }
                     });
-
+                    // Add the extracted columns into the table
+                    //TODO
+                    // Add a KV map to translate table names in SQL to nicely presented column names
                     tableVariants.getColumns().add(column);
-
+                    visibleColumns.add(rsColumns.getString("name"));
                 }
             }
             // Read variants and add to table
@@ -193,11 +215,16 @@ public class CyclePlansController implements Initializable {
             }
 
             cyclePlanSelector.setItems(cyclePlanList);
+
+            filterButton.setDisable(false);
+            settingsButton.setDisable(false);
         } catch (Exception e) {
-            System.err.println("CyclePlansController cyclePlanSelected(): " + e.getMessage());
+            System.err.println("CyclePlansController cyclePlanSelected() ERROR 1: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    //Compare button action handler
     public void compareButtonClicked() throws IOException {
         Stage stage;
         Parent root;
@@ -211,10 +238,20 @@ public class CyclePlansController implements Initializable {
 
     }
 
+    // Export button action handler
     public void exportButtonClicked() {
         System.out.println("exporting");
+        //TODO
+        //Add a dialog allowing the user to select from:
+        // * Timeline
+        // * Powertrain map
+        // * Proect overviews (based on engine or based on transmission)
+        // * Bubble graphs per project (jscript based)
+        // * Javascript based timeline per engine
+        // * Graphviz?
     }
 
+    // Helper method used by import button action handler below
     private Object getCellValue(Cell cell) {
         switch (cell.getCellType()) {
             case Cell.CELL_TYPE_STRING:
@@ -226,7 +263,6 @@ public class CyclePlansController implements Initializable {
             case Cell.CELL_TYPE_NUMERIC:
                 return cell.getNumericCellValue();
         }
-
         return null;
     }
 
@@ -256,7 +292,7 @@ public class CyclePlansController implements Initializable {
             Workbook workbook;
 
             if (selectedFile.getPath().endsWith("xlsx")) {
-                workbook = new XSSFWorkbook(inputStream);;
+                workbook = new XSSFWorkbook(inputStream);
             } else {
                 workbook = new HSSFWorkbook(inputStream);
             }
@@ -265,7 +301,7 @@ public class CyclePlansController implements Initializable {
             Iterator<Sheet> sheetIterator = workbook.sheetIterator();
 
             //Iterate over all sheets and populate a checkboxfield and let user select on of the sheets
-            sheetsInFile = new ArrayList();; //reset just in case
+            sheetsInFile = new ArrayList(); //reset just in case
             while (sheetIterator.hasNext()) {
                 String nextSheet = sheetIterator.next().getSheetName();
                 sheetsInFile.add(nextSheet); //add found sheet into list of available sheets.
@@ -296,6 +332,8 @@ public class CyclePlansController implements Initializable {
                 stage.showAndWait(); // pause until the user has selected a sheet
             }
 
+            // only continue if a sheet was selected (=abort if used presses cancel)
+            // AND if the cycle plan name is unique, i.e. not already imported
             if (selectedSheet != null && importedCyclePlanName != null) {
                 // Add new cycleplan into Database
                 try {
@@ -377,7 +415,6 @@ public class CyclePlansController implements Initializable {
                             variant.getEmissionClass(), variant.getStartOfProd(), variant.getEndOfProd());
                     add(entry);
                     index++;
-                    //INSERT INTO "main"."VARIANTS" ("Plant","VariantID") VALUES ('Plant2', 'ID 3')
                     try {
                         Statement statement = RPT.conn.createStatement();
                         statement.setQueryTimeout(30);
@@ -390,7 +427,6 @@ public class CyclePlansController implements Initializable {
                         Integer count = rs.getInt(1);
                         // add variant if it does not exist
                         if (count == 0) { // entry did not existbefore
-                            //INSERT INTO VARIANTS (Plant,VariantID) VALUES ('VCG','Variant6')
                             query = "INSERT INTO VARIANTS ("
                                     + "Plant, Platform, Vehicle, Propulsion, Denomination, Fuel, EngineFamily, Generation, EngineCode, Displacement, "
                                     + "EnginePower, ElMotorPower, Torque, TorqueOverBoost, GearboxType, Gears, Gearbox, Driveline, TransmissionCode, "
@@ -407,8 +443,7 @@ public class CyclePlansController implements Initializable {
                                     + "\')";
                             statement.executeUpdate(query);
                         }
-                        // Add connection between cycle plan and variant
-
+                        // Add relation between cycle plan and variant
                         query = "INSERT INTO VariantBelongsToCyclePlan (VariantID, CyclePlanID) VALUES (\'" + variantID + "\', \'" + importedCyclePlanName + "\')";
                         statement.executeUpdate(query);
 
@@ -425,58 +460,37 @@ public class CyclePlansController implements Initializable {
         }
     }
 
+    //Filter button action handler
+    public void filterButtonClicked() {
+        //TODO set filter conditions of data
+    }
+
+    //Settings button action handler
+    public void settingsButtonClicked() throws IOException {
+        System.out.println("Setup view");
+        //Create dialog
+        Stage stage = new Stage();
+        Parent root;
+        root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/dialogSetColumns.fxml"));
+
+        stage.setScene(new Scene(root));
+        stage.setTitle("Set which columns to show");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait(); // pause until the user has selected a sheet
+
+        for (TableColumn<TableVariant, ?> col : tableVariants.getColumns()) {
+            if (visibleColumns.contains(col.getText())) {
+                col.setVisible(true);
+            } else {
+                col.setVisible(false);
+            }
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         tableVariants.setEditable(true);
         // specify a cell factory for each column
-//        variantID.setCellValueFactory(new PropertyValueFactory<>("variantID"));
-//        variantID.setEditable(false);
-//
-//        //specify a cell factory  and enable it editable
-//        engineName.setCellValueFactory(new PropertyValueFactory<>("engineName"));
-//        engineName.setCellFactory(TextFieldTableCell.forTableColumn());
-//        engineName.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-//            @Override
-//            public void handle(CellEditEvent<TableVariant, String> event) {
-//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineName(event.getNewValue());
-//            }
-//        });
-//        //specify a cell factory  and enable it editable
-//        denomination.setCellValueFactory(new PropertyValueFactory<>("denomination"));
-//        denomination.setCellFactory(TextFieldTableCell.forTableColumn());
-//        engineName.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-//            @Override
-//            public void handle(CellEditEvent<TableVariant, String> event) {
-//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setDenomination(event.getNewValue());
-//            }
-//        });
-//        //specify a cell factory  and enable it editable
-//        gearbox.setCellValueFactory(new PropertyValueFactory<>("gearbox"));
-//        gearbox.setCellFactory(TextFieldTableCell.forTableColumn());
-//        gearbox.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-//            @Override
-//            public void handle(CellEditEvent<TableVariant, String> event) {
-//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setGearbox(event.getNewValue());
-//            }
-//        });
-//        //specify a cell factory  and enable it editable
-//        emissionsCategory.setCellValueFactory(new PropertyValueFactory<>("emissionClass"));
-//        emissionsCategory.setCellFactory(TextFieldTableCell.forTableColumn());
-//        emissionsCategory.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-//            @Override
-//            public void handle(CellEditEvent<TableVariant, String> event) {
-//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());
-//            }
-//        });
-//        //specify a cell factory  and enable it editable
-//        generation.setCellValueFactory(new PropertyValueFactory<>("generation"));
-//        generation.setCellFactory(TextFieldTableCell.forTableColumn());
-//        generation.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-//            @Override
-//            public void handle(CellEditEvent<TableVariant, String> event) {
-//                ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEmissionClass(event.getNewValue());
-//            }
-//        });
         //Push into the table
         tableVariants.setItems(data);
 
@@ -484,6 +498,10 @@ public class CyclePlansController implements Initializable {
         addButton.setTooltip(new Tooltip("Add new item"));
         removeButton.setTooltip(new Tooltip("Remove selected items"));
         saveButton.setTooltip(new Tooltip("Save"));
+        importButton.setTooltip(new Tooltip("Import Cycleplan"));
+        exportButton.setTooltip(new Tooltip("Export data"));
+        filterButton.setTooltip(new Tooltip("Filter table"));
+        settingsButton.setTooltip(new Tooltip("Setup view"));
 
         // empty cycle plan list in case one arrives from other view
         cyclePlanList.clear();

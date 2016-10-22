@@ -32,7 +32,7 @@ import rpt.RPT;
  *
  * @author scolak1
  */
-public class DialogDefineChangedController implements Initializable {
+public class DialogsetColumnsController implements Initializable {
 
     @FXML
     private Button okButton;
@@ -56,20 +56,23 @@ public class DialogDefineChangedController implements Initializable {
         addCheckBoxes();
     }
 
-    // When the OK button is pressed the majorChanger arrayList is set in the parent controller.
+    // When the OK button is pressed the column visibility list is set in the parent.
     @FXML
     public void okButtonPressed() {
+        //Empty visibleList and repopulate it with new selection
+        CyclePlansController.visibleColumns.clear();
+        
         ObservableList<Node> checkBoxes = leftContainer.getChildren();
         for (Node n: checkBoxes){
             CheckBox cb = (CheckBox) n;
             if (cb.isSelected())
-                CompareDialogController.majorChanges.add(cb.getText());
+                CyclePlansController.visibleColumns.add(cb.getText());
         }
         checkBoxes = rightContainer.getChildren();
         for (Node n: checkBoxes){
             CheckBox cb = (CheckBox) n;
             if (cb.isSelected())
-                CompareDialogController.majorChanges.add(cb.getText());
+                CyclePlansController.visibleColumns.add(cb.getText());
         }
         closeDialog();
     }
@@ -105,17 +108,15 @@ public class DialogDefineChangedController implements Initializable {
                     rightContainer.getChildren().add(cb);
                     left = true;
                 }
-                boolean preChecked = buttonText.contains("Platform") || 
-                        buttonText.contains("Vehicle") ||
-                        buttonText.contains("Denomination") ||
-                        buttonText.contains("GearboxType") ||
-                        buttonText.contains("Generation") ||
-                        buttonText.contains("EmissionClass");
+                boolean preChecked;
+                if (CyclePlansController.visibleColumns.isEmpty())
+                    preChecked = false;
+                else
+                    preChecked = CyclePlansController.visibleColumns.contains(buttonText);
                 if (preChecked) {
                     cb.requestFocus();
                     cb.setSelected(true);
                 }
-                
             }
         } catch (Exception e) {
             System.err.println("DialogDefineChangedController ERROR 1: " + e.getMessage());

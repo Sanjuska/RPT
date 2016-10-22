@@ -12,6 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.ProgramStrategist.CyclePlans.CyclePlansController">
    <children>
@@ -20,117 +21,147 @@
             <TableView fx:id="tableVariants" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="402.0" prefWidth="750.0" BorderPane.alignment="CENTER" />
          </center>
          <top>
-            <ToolBar maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="750.0" BorderPane.alignment="TOP_LEFT">
-               <items>
-                  <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addButtonClicked" text="Add" textOverrun="CLIP">
-                     <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Icons/addIcon.png" />
-                           </image>
+            <HBox prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ToolBar maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" HBox.hgrow="ALWAYS">
+                     <items>
+                        <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addButtonClicked" text="Add" textOverrun="CLIP">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="16.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/addIcon.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <viewport>
+                                    <Rectangle2D />
+                                 </viewport>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </ImageView>
+                             
+                           </graphic>
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
                            </cursor>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                           <effect>
-                              <Blend />
-                           </effect>
-                        </ImageView>
-                       
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                  </Button>
-                  <Button fx:id="removeButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeButtonClicked" text="Remove">
-                     <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Icons/removeIcon.png" />
-                           </image>
+                        </Button>
+                        <Button fx:id="removeButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeButtonClicked" text="Remove">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/removeIcon.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                                 <viewport>
+                                    <Rectangle2D />
+                                 </viewport>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Edit">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/editIcon.png" />
+                                 </image>
+                                 <viewport>
+                                    <Rectangle2D />
+                                 </viewport>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </ImageView>
+                           </graphic>
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
                            </cursor>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                           <effect>
-                              <Blend />
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Edit">
-                     <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Icons/editIcon.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                           <effect>
-                              <Blend />
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="DEFAULT" />
-                     </cursor>
-                  </Button>
-                  <Button fx:id="saveButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Save" textOverrun="CLIP">
-                     <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Icons/saveIcon.png" />
-                           </image>
-                           <effect>
-                              <Blend />
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <Button fx:id="importButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#importButtonClicked" text="Import" textOverrun="CLIP">
-                     <graphic>
-                        <ImageView fitHeight="12.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Icons/importIcon.png" />
-                           </image>
-                           <effect>
-                              <Blend />
-                           </effect>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <ComboBox fx:id="cyclePlanSelector" onAction="#cyclePlanSelected" prefWidth="150.0" promptText="Cycle Plan" />
-                  <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <Button fx:id="compareButton" accessibleText="Compare" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#compareButtonClicked" text="Compare">
-                     <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Icons/compareIcon.png" />
-                           </image>
-                           <effect>
-                              <Blend />
-                           </effect>
-                           <cursor>
-                              <Cursor fx:constant="DEFAULT" />
-                           </cursor>
-                        </ImageView>
-                     </graphic></Button>
-                  <Button fx:id="exportButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#exportButtonClicked" text="Button">
-                     <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Icons/exportIcon.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></Button>
-               </items>
-            </ToolBar>
+                        </Button>
+                        <Button fx:id="saveButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Save" textOverrun="CLIP">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/saveIcon.png" />
+                                 </image>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" />
+                        <Button fx:id="importButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#importButtonClicked" text="Import" textOverrun="CLIP">
+                           <graphic>
+                              <ImageView fitHeight="12.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/importIcon.png" />
+                                 </image>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <ComboBox fx:id="cyclePlanSelector" onAction="#cyclePlanSelected" prefWidth="150.0" promptText="Cycle Plan" />
+                        <Separator orientation="VERTICAL" prefHeight="200.0" />
+                        <Button fx:id="compareButton" accessibleText="Compare" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#compareButtonClicked" text="Compare">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/compareIcon.png" />
+                                 </image>
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                                 <cursor>
+                                    <Cursor fx:constant="DEFAULT" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="exportButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#exportButtonClicked" text="Button">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/exportIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" />
+                     </items>
+                  </ToolBar>
+                  <ToolBar>
+                    <items>
+                        <Separator orientation="VERTICAL" />
+                      <Button fx:id="filterButton" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#filterButtonClicked" text="Filter">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/filterIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="settingsButton" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#settingsButtonClicked" text="Settings">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../Icons/settingsIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                    </items>
+                  </ToolBar>
+               </children>
+            </HBox>
          </top>
       </BorderPane>
    </children>
