@@ -14,13 +14,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="536.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.GroupManager.OwnResources.OwnResourcesController">
+<BorderPane prefHeight="536.0" prefWidth="813.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.Manager.OwnResources.OwnResourcesController">
    <top>
       <ToolBar maxWidth="1.7976931348623157E308" prefHeight="43.0" prefWidth="800.0" BorderPane.alignment="CENTER">
         <items>
           <Button fx:id="addButton" mnemonicParsing="false" onAction="#addButtonClicked">
                <graphic>
-                  <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../Icons/addNameIcon.png" />
                      </image>
@@ -29,7 +29,7 @@
             </Button>
             <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeButtonClicked">
                <graphic>
-                  <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../Icons/removeUserIcon.png" />
                      </image>
@@ -38,7 +38,7 @@
             </Button>
             <Button fx:id="saveButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Save">
                <graphic>
-                  <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../Icons/saveIcon.png" />
                      </image>

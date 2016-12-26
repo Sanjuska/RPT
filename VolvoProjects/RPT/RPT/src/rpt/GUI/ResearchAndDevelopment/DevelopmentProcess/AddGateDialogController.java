@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -29,8 +30,11 @@ public class AddGateDialogController implements Initializable {
     @FXML
     TextField weeksTextField;
     
+    //@FXML
+    //TextField descriptionTextField;
+    
     @FXML
-    TextField descriptionTextField;
+    TextArea descriptionTextArea;
   
     @FXML
     Button addButton;
@@ -52,8 +56,8 @@ public class AddGateDialogController implements Initializable {
         //create entry for the table
         TableDevelopmentProcess entry = new TableDevelopmentProcess();
         entry.setGateColumnString(gateTextField.getText());
-        entry.setWeeksColumnInteger(Integer.parseInt(weeksTextField.getText()));
-        entry.setDescriptionColumnString(descriptionTextField.getText());
+        //entry.setWeeksColumnInteger(Integer.parseInt(weeksTextField.getText()));
+        entry.setDescriptionColumnString(descriptionTextArea.getText());
         
        //insert data in the table
        DevelopmentProcessController.add(entry);
@@ -68,8 +72,8 @@ public class AddGateDialogController implements Initializable {
     // clear form method
     public void clearForm(){
         gateTextField.clear();
-        weeksTextField.clear();
-        descriptionTextField.clear();
+        //weeksTextField.clear();
+        descriptionTextArea.clear();
     }
    
      

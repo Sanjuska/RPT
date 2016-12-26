@@ -29,7 +29,7 @@
               <items>
                   <Button fx:id="addGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addGateButtonClicked" text="Add">
                      <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../Icons/addIcon.png" />
                            </image>
@@ -38,7 +38,7 @@
                   </Button>
                   <Button fx:id="removeGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeGateButtonClicked" text="Remove">
                      <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../Icons/removeIcon.png" />
                            </image>
@@ -47,7 +47,7 @@
                   </Button>
                   <Button fx:id="editGateButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Edit">
                      <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../Icons/editIcon.png" />
                            </image>
@@ -58,7 +58,7 @@
                   <ComboBox fx:id="processComboBox" onAction="#processSelected" promptText="Process" />
                   <Button fx:id="addProcessButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addProcessButtonPressed" text="Add">
                      <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../Icons/addProcessIcon.png" />
                            </image>
@@ -67,7 +67,7 @@
                   </Button>
                   <Button fx:id="deleteProcessButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#deleteProcessButtonPressed" text="Remove">
                      <graphic>
-                        <ImageView fitHeight="13.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../../Icons/deleteProcessIcon.png" />
                            </image>

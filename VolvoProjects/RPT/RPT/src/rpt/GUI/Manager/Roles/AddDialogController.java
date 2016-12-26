@@ -3,7 +3,7 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package rpt.GUI.GroupManager.Roles;
+package rpt.GUI.Manager.Roles;
 
 import rpt.GUI.ProgramStrategist.*;
 import java.net.URL;
@@ -45,7 +45,7 @@ public class AddDialogController implements Initializable {
     public void add(){
           //create entry for the table
         TableRoles entry = new TableRoles();
-        entry.setRolesNamColumn(rolesTextField.getText());
+        entry.setRolesNameColumn(rolesTextField.getText());
         
        //insert data in the table
        RolesController.add(entry);

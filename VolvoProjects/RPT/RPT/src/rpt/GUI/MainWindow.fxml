@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -17,7 +18,8 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem mnemonicParsing="false" onAction="#logOutClicked" text="Log Out" />
+                    <MenuItem mnemonicParsing="false" onAction="#closeClicked" text="Close" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
@@ -41,7 +43,10 @@
             </VBox>
          </left>
          <bottom>
-            <Label text="Label" BorderPane.alignment="CENTER" />
+            <Label fx:id="messageLabel" maxWidth="1.7976931348623157E308" text="Message" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding></Label>
          </bottom>
       </BorderPane>
    </children>

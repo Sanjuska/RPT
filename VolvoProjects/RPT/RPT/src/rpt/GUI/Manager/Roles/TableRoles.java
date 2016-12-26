@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rpt.GUI.GroupManager.Roles;
+package rpt.GUI.Manager.Roles;
 
 /**
  *
@@ -14,24 +14,24 @@ public class TableRoles {
     
     
    //initialize all variables in Table Views
-    private String rolesNamColumn;
+    private String rolesNameColumn;
     
    //Constructor with no parameters
     public TableRoles(){
-        this.rolesNamColumn = "";
+        this.rolesNameColumn = "";
     }
    //Constructor with parameters
-    public TableRoles(String rolesNamColumn) {
-        this.rolesNamColumn = rolesNamColumn;
+    public TableRoles(String rolesNameColumn) {
+        this.rolesNameColumn = rolesNameColumn;
     }
     
     //Getters and setters
-    public String getRolesNamColumn() {
-        return rolesNamColumn;
+    public String getRolesNameColumn() {
+        return rolesNameColumn;
     }
 
-    public void setRolesNamColumn(String rolesNamColumn) {
-        this.rolesNamColumn = rolesNamColumn;
+    public void setRolesNameColumn(String rolesNameColumn) {
+        this.rolesNameColumn = rolesNameColumn;
     } 
     
     

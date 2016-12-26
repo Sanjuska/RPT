@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rpt.GUI.GroupManager.Roles;
+package rpt.GUI.Manager.Roles;
 
 import java.io.IOException;
 import java.net.URL;
@@ -48,8 +48,7 @@ public class RolesController implements Initializable {
     Button removeButton;
 
     // ObservableList object enables the tracking of any changes to its elements
-    private static ObservableList<TableRoles> data = FXCollections.observableArrayList(new TableRoles("Group Manager")
-    );
+    private static ObservableList<TableRoles> data = FXCollections.observableArrayList();
 
     //Create table's data, get all of the items
     public static ObservableList<TableRoles> getRoles() {
@@ -68,7 +67,7 @@ public class RolesController implements Initializable {
         if (event.getSource() == addButton) {
             //Open the PopUp window with implementation fields
             stage = new Stage();
-            root = FXMLLoader.load(getClass().getResource("/rpt/GUI/GroupManager/Roles/AddDialog.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/rpt/GUI/Manager/Roles/AddDialog.fxml"));
             stage.setScene(new Scene(root));
             stage.setTitle("Add role");
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -91,12 +90,12 @@ public class RolesController implements Initializable {
         tableRoles.setEditable(true);
 
         //specify a cell factory  and enable it editable
-        rolesColumn.setCellValueFactory(new PropertyValueFactory("rolesNamColumn")); //connect to the private variables in the table
+        rolesColumn.setCellValueFactory(new PropertyValueFactory("rolesNameColumn")); //connect to the private variables in the table
         rolesColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         rolesColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableRoles, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<TableRoles, String> event) {
-                ((TableRoles) event.getTableView().getItems().get(event.getTablePosition().getRow())).setRolesNamColumn(event.getNewValue());
+                ((TableRoles) event.getTableView().getItems().get(event.getTablePosition().getRow())).setRolesNameColumn(event.getNewValue());
             }
         });
 

@@ -37,13 +37,16 @@ public class LoginController implements Initializable {
             Label wrongLogin;
     @FXML
             private Button loginButton;
+    
+    public static String userID = "";
+    
     public void loginCheck () throws IOException{
      //Check user password
        String password = "";
        try {
            Statement statement = RPT.conn.createStatement();
            statement.setQueryTimeout(30);
-           String query = "SELECT * FROM USERS WHERE cdsid = '" + cdsidField.getText() + "'";
+           String query = "SELECT * FROM EMPLOYEES WHERE cdsid = '" + cdsidField.getText() + "'";
            ResultSet rs = statement.executeQuery(query);
            
            //TODO Add PRAGMA Truncate when creating new database or you may get disk errors
@@ -56,6 +59,9 @@ public class LoginController implements Initializable {
         }
         
         if (password.equals(passwordField.getText())){
+            // Set the global user ID to the now logged in user
+            userID = cdsidField.getText();
+            
            //Switch to another stage - Main stage
             Parent root = FXMLLoader.load(getClass().getResource("/rpt/GUI/MainWindow.fxml"));
             Scene scene = new Scene(root);

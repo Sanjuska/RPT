@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rpt.GUI.Projects.ProjectOverviewController">
+    <top>
+        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="605.0" BorderPane.alignment="CENTER">
+            <children>
+                <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="39.0" prefWidth="609.0" HBox.hgrow="ALWAYS">
+                    <items>
+                        <Button fx:id="addButton" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#addGateButtonClicked" text="Add">
+                            <graphic>
+                                <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../Icons/addIcon.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="removeButton" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#removeGateButtonClicked" text="Remove">
+                            <graphic>
+                                <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../Icons/removeIcon.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="editButton" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Edit">
+                            <graphic>
+                                <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../Icons/editIcon.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Separator mouseTransparent="true" orientation="VERTICAL" prefHeight="0.0" prefWidth="4.0" />
+                        <ComboBox fx:id="projectComboBox" onAction="#processSelected" promptText="Project" />
+                        <Button fx:id="addProjectButton" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#addProcessButtonPressed" text="Add">
+                            <graphic>
+                                <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../Icons/addProjectIcon.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="deleteProjectButton" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#deleteProcessButtonPressed" text="Remove">
+                            <graphic>
+                                <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../Icons/removeProjectIcon.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </items>
+                </ToolBar>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox maxWidth="1.7976931348623157E308" minWidth="-Infinity" VBox.vgrow="NEVER">
+                    <children>
+                        <HBox HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Project Leader:">
+                                    <HBox.margin>
+                                        <Insets left="10.0" top="10.0" />
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                        </HBox>
+                        <HBox nodeOrientation="RIGHT_TO_LEFT">
+                            <children>
+                                <Label contentDisplay="RIGHT" text="Job 1:" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="10.0" right="10.0" top="10.0" />
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+                <HBox>
+                    <children>
+                        <VBox>
+                            <children>
+                                <Label text="Next Event:">
+                                    <VBox.margin>
+                                        <Insets left="10.0" top="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Completion Level:">
+                                    <VBox.margin>
+                                        <Insets left="10.0" right="10.0" top="10.0" />
+                                    </VBox.margin>
+                                </Label>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+                        <Tab text="Variants">
+                            <content>
+                                <GridPane>
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <TableView fx:id="tableVariants" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                                    </children>
+                                </GridPane>
+                            </content>
+                        </Tab>
+                        <Tab text="Team">
+                            <content>
+                                <GridPane>
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <TableView fx:id="tableGates1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                                        <HBox nodeOrientation="RIGHT_TO_LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                                            <children>
+                                                <Button mnemonicParsing="false" text="BubbleView">
+                                                    <HBox.margin>
+                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="TableView">
+                                                    <HBox.margin>
+                                                        <Insets bottom="10.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </Button>
+                                                <ComboBox promptText="Top Level">
+                                                    <HBox.margin>
+                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </ComboBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </GridPane>
+                            </content>
+                        </Tab>
+                        <Tab text="Milestones">
+                            <content>
+                                <GridPane>
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <TableView fx:id="tableGates2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                                        <HBox nodeOrientation="RIGHT_TO_LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                                            <children>
+                                                <Button mnemonicParsing="false" text="GantView">
+                                                    <HBox.margin>
+                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="TableView">
+                                                    <HBox.margin>
+                                                        <Insets bottom="10.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </Button>
+                                                <ComboBox promptText="Top Level">
+                                                    <HBox.margin>
+                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                    </HBox.margin>
+                                                </ComboBox>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </GridPane>
+                            </content>
+                        </Tab>
+                    </tabs>
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </TabPane>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

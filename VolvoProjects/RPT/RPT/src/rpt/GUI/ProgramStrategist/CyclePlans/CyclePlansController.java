@@ -15,6 +15,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,17 +23,27 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckBoxTreeItem;
+import javafx.scene.control.CheckBoxTreeItem.TreeModificationEvent;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -42,7 +53,22 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.Effect;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -67,18 +93,6 @@ public class CyclePlansController implements Initializable {
     //Define table and buttons from FXML
     @FXML
     public TableView<TableVariant> tableVariants;
-    //@FXML
-    //public TableColumn<TableVariant, Integer> variantID;
-    //@FXML
-    //public TableColumn<TableVariant, String> engineName;
-    //@FXML
-    //public TableColumn<TableVariant, String> denomination;
-    //@FXML
-    //public TableColumn<TableVariant, String> gearbox;
-    //@FXML
-    //public TableColumn<TableVariant, String> emissionsCategory;
-    //@FXML
-    //public TableColumn<TableVariant, String> generation;
     @FXML
     private Button addButton;
     @FXML
@@ -94,9 +108,25 @@ public class CyclePlansController implements Initializable {
     @FXML
     private Button exportButton;
     @FXML
-    private Button filterButton;
+    private ToggleButton filterButton;
     @FXML
-    private Button settingsButton;
+    private ToggleButton settingsButton;
+    @FXML
+    private TreeView<String> filterTree;
+    @FXML
+    private VBox filterMenu;
+    @FXML
+    private Text filterHeader;
+    @FXML
+    private ImageView filterImage;
+    @FXML
+    private TreeView<String> settingsTree;
+    @FXML
+    private VBox settingsMenu;
+    @FXML
+    private Text settingsHeader;
+    @FXML
+    private ImageView settingsImage;
 
     // Declare public static variables used for communication from outside the class
     public static String selectedSheet = null;
@@ -124,6 +154,8 @@ public class CyclePlansController implements Initializable {
 
     // ObservableList object enables the tracking of any changes to its elements
     private static ObservableList<TableVariant> data = FXCollections.observableArrayList();
+    FilteredList<TableVariant> filteredData = new FilteredList<>(data, p -> true); //make it possible to filter
+    Map<String, ArrayList<String>> filterList = new HashMap<String, ArrayList<String>>();
 
     //Add entry into table
     public static void add(TableVariant entry) {
@@ -144,7 +176,7 @@ public class CyclePlansController implements Initializable {
 
         //Open the PopUp window with implementation fields
         stage = new Stage();
-        root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramManager/Variants/AddDialog.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/AddDialog.fxml"));
         stage.setScene(new Scene(root));
         stage.setTitle("Add");
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -161,94 +193,9 @@ public class CyclePlansController implements Initializable {
     }
 
     // Save button action handler
-    public void saveButtonClickes() {
+    public void saveButtonClicked() {
         // does nothing for now, should save a new version of the selected cycle plan
         // i.e. update the relations between cycle plan and variants.
-    }
-
-    // Cycle plan combobox action handler
-    public void cyclePlanSelected() {
-        // Set cycle plan name to whatever was elected in the comboBox
-        selectedCyclePlan = cyclePlanSelector.getSelectionModel().getSelectedItem().toString();
-
-        try {
-            Statement statement = RPT.conn.createStatement();
-            statement.setQueryTimeout(30);
-            // Extract column names from database if no columns exist in the table view
-            if (tableVariants.getColumns().isEmpty()) {
-                String query = "PRAGMA table_info(VARIANTS)"; //Get all column names
-                ResultSet rsColumns = statement.executeQuery(query);
-
-                while (rsColumns.next()) {
-                    TableColumn<TableVariant, String> column = new TableColumn<TableVariant, String>(rsColumns.getString("name"));
-                    column.setCellValueFactory(new PropertyValueFactory<>(rsColumns.getString("name")));
-                    column.setCellFactory(TextFieldTableCell.forTableColumn());
-                    column.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
-                        @Override
-                        public void handle(CellEditEvent<TableVariant, String> event) {
-                            ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineName(event.getNewValue());
-                        }
-                    });
-                    // Add the extracted columns into the table
-                    //TODO
-                    // Add a KV map to translate table names in SQL to nicely presented column names
-                    tableVariants.getColumns().add(column);
-                    visibleColumns.add(rsColumns.getString("name"));
-                }
-            }
-            // Read variants and add to table
-            query = "SELECT * FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
-                    + "VariantBelongsToCyclePlan.CyclePlanID= \'" + selectedCyclePlan + "\' AND VARIANTS.VariantID = VariantBelongsToCyclePlan.VariantID";
-            ResultSet rs = statement.executeQuery(query);
-
-            data.clear();
-
-            while (rs.next()) {
-                TableVariant entry = new TableVariant(rs.getString("Plant"),
-                        rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
-                        rs.getString("Denomination"), rs.getString("Fuel"), rs.getString("EngineFamily"), rs.getString("Generation"),
-                        "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
-                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType"),
-                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode"),
-                        rs.getString("certGroup"), rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
-                add(entry);
-            }
-
-            cyclePlanSelector.setItems(cyclePlanList);
-
-            filterButton.setDisable(false);
-            settingsButton.setDisable(false);
-        } catch (Exception e) {
-            System.err.println("CyclePlansController cyclePlanSelected() ERROR 1: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    //Compare button action handler
-    public void compareButtonClicked() throws IOException {
-        Stage stage;
-        Parent root;
-        stage = new Stage();
-        root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/CompareDialog.fxml"));
-        stage.setScene(new Scene(root));
-        stage.setTitle("Select Cycle Plan for comparison");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(compareButton.getScene().getWindow());
-        stage.showAndWait();
-
-    }
-
-    // Export button action handler
-    public void exportButtonClicked() {
-        System.out.println("exporting");
-        //TODO
-        //Add a dialog allowing the user to select from:
-        // * Timeline
-        // * Powertrain map
-        // * Proect overviews (based on engine or based on transmission)
-        // * Bubble graphs per project (jscript based)
-        // * Javascript based timeline per engine
-        // * Graphviz?
     }
 
     // Helper method used by import button action handler below
@@ -460,45 +407,211 @@ public class CyclePlansController implements Initializable {
         }
     }
 
+    // Cycle plan combobox action handler
+    public void cyclePlanSelected() {
+        List<String> columnFilterList = new ArrayList<String>();
+        // Set cycle plan name to whatever was elected in the comboBox
+        selectedCyclePlan = cyclePlanSelector.getSelectionModel().getSelectedItem().toString();
+
+        try {
+            Statement statement = RPT.conn.createStatement();
+            statement.setQueryTimeout(30);
+            // Extract column names from database if no columns exist in the table view
+            if (tableVariants.getColumns().isEmpty()) {
+                String query = "PRAGMA table_info(VARIANTS)"; //Get all column names
+                ResultSet rsColumns = statement.executeQuery(query);
+
+                while (rsColumns.next()) {
+                    String colName = rsColumns.getString("name");
+                    columnFilterList.add(colName);
+                    TableColumn<TableVariant, String> column = new TableColumn<TableVariant, String>(colName);
+                    column.setCellValueFactory(new PropertyValueFactory<>(colName));
+                    column.setCellFactory(TextFieldTableCell.forTableColumn());
+                    column.setOnEditCommit(new EventHandler<CellEditEvent<TableVariant, String>>() {
+                        @Override
+                        public void handle(CellEditEvent<TableVariant, String> event) {
+                            ((TableVariant) event.getTableView().getItems().get(event.getTablePosition().getRow())).setEngineName(event.getNewValue());
+                        }
+                    });
+                    // Add the extracted columns into the table
+                    //TODO
+                    // Add a KV map to translate table names in SQL to nicely presented column names
+                    tableVariants.getColumns().add(column);
+                    visibleColumns.add(colName);
+                    CheckBoxTreeItem<String> root = (CheckBoxTreeItem<String>) settingsTree.getRoot();
+                    CheckBoxTreeItem<String> item = makeBranchTreeItem(colName, root);
+                    item.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                        //System.out.println(item.getValue() + " selection state: " + newVal);
+                        if (item.isSelected()) {
+                            if (visibleColumns.contains(item.getValue())) {
+                                visibleColumns.remove(item.getValue());
+                            }
+                        } else if (!visibleColumns.contains(item.getValue())) {
+                            visibleColumns.add(item.getValue());
+                        }
+                        updateVisibility();
+                    });
+
+                }
+            }
+            //Populate filter view
+            Collections.sort(columnFilterList);
+            try {
+                CheckBoxTreeItem<String> root = (CheckBoxTreeItem<String>) filterTree.getRoot();
+                //For each column, extract distinct values and insert in tree structure below that column CheckBox
+                for (String column : columnFilterList) {
+                    query = "SELECT DISTINCT VARIANTS." + column + " FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
+                            + "VARIANTS.VariantID = VariantBelongsToCyclePlan.VariantID  AND "
+                            + "VariantBelongsToCyclePlan.CyclePlanID = \'" + selectedCyclePlan + "\' ORDER BY VARIANTS." + column;
+                    ResultSet rsColumns = statement.executeQuery(query);
+                    CheckBoxTreeItem<String> parent = makeBranchTreeItem(column, root);
+
+                    //ArrayList<String> allowedValues = new ArrayList();
+                    //filterList.put(column, allowedValues);
+                    // Create all CheckBoxItems
+                    // Add listeners which will be used for filtering of data
+                    while (rsColumns.next()) {
+                        CheckBoxTreeItem<String> item = makeBranchTreeItem(rsColumns.getString(column), parent);
+                        item.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                            //On change of state, update data filter
+                            filteredData.setPredicate(variant -> {
+                                //TODO
+                                // implement as Stream to improve performance
+                                // Use parrallell streams to improve speed
+                                // http://www.drdobbs.com/jvm/lambdas-and-streams-in-java-8-libraries/240166818
+                                for (TreeItem branchItem : filterTree.getRoot().getChildren()) {
+                                    CheckBoxTreeItem branch = (CheckBoxTreeItem) branchItem;
+                                    if (branch.isSelected() || branch.isIndeterminate()) { //New list to be added
+                                        ArrayList<String> allowedValues = new ArrayList();
+                                        for (Object checkBox : branch.getChildren()) {
+                                            if (((CheckBoxTreeItem) checkBox).isSelected()) {
+                                                allowedValues.add((String) ((CheckBoxTreeItem) checkBox).getValue());
+                                            }
+                                        }
+                                        filterList.put((String) branch.getValue(), allowedValues);
+                                        //System.out.println("Store: "  + (String) branch.getValue());
+                                    } else {
+                                        filterList.remove((String) branch.getValue()); // remove branch if it no longer has any values
+                                    }
+                                }
+                                for (String key : filterList.keySet()) {
+                                    if (!filterList.get(key).contains(variant.getValue(key))) {
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            });
+                        });
+                    }
+                }
+                //item.getValue().setSelected(true);
+            } catch (Exception e) {
+                System.out.println(query);
+                System.err.println("CyclePlansController CyclePlanSelected() ERROR 1: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            // Read variants and add to table
+            query = "SELECT * FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
+                    + "VariantBelongsToCyclePlan.CyclePlanID= \'" + selectedCyclePlan + "\' AND VARIANTS.VariantID = VariantBelongsToCyclePlan.VariantID";
+            ResultSet rs = statement.executeQuery(query);
+
+            data.clear();
+
+            while (rs.next()) {
+                TableVariant entry = new TableVariant(rs.getString("Plant"),
+                        rs.getString("Platform"), rs.getString("Vehicle"), rs.getString("Propulsion"),
+                        rs.getString("Denomination"), rs.getString("Fuel"), rs.getString("EngineFamily"), rs.getString("Generation"),
+                        "EngineName not used", rs.getString("EngineCode"), rs.getString("Displacement"), rs.getString("EnginePower"),
+                        rs.getString("ElMotorPower"), rs.getString("Torque"), rs.getString("TorqueOverBoost"), rs.getString("GearboxType"),
+                        rs.getString("Gears"), rs.getString("Gearbox"), rs.getString("Driveline"), rs.getString("TransmissionCode"),
+                        rs.getString("certGroup"), rs.getString("EmissionClass"), rs.getString("StartOfProd"), rs.getString("EndOfProd"));
+                add(entry);
+            }
+
+            cyclePlanSelector.setItems(cyclePlanList);
+
+            filterButton.setDisable(
+                    false);
+            settingsButton.setDisable(
+                    false);
+        } catch (Exception e) {
+            System.err.println("CyclePlansController cyclePlanSelected() ERROR 2: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    //Compare button action handler
+    public void compareButtonClicked() throws IOException {
+        Stage stage;
+        Parent root;
+        stage = new Stage();
+        root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/CompareDialog.fxml"));
+        stage.setScene(new Scene(root));
+        stage.setTitle("Select Cycle Plan for comparison");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(compareButton.getScene().getWindow());
+        stage.showAndWait();
+
+    }
+
+    // Export button action handler
+    public void exportButtonClicked() {
+        System.out.println("exporting");
+        //TODO
+        //Add a dialog allowing the user to select from:
+        // * Timeline
+        // * Powertrain map
+        // * Proect overviews (based on engine or based on transmission)
+        // * Bubble graphs per project (jscript based)
+        // * Javascript based timeline per engine
+        // * Graphviz?
+    }
+
     //Filter button action handler
     public void filterButtonClicked() {
-        //TODO set filter conditions of data
+        if (filterButton.isSelected()) {
+            //TODO set filter conditions of data
+            //if (filterMenu.getPrefWidth() == 0) {
+            //filterTree.setPrefWidth(200);
+            filterMenu.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            filterHeader.setText("Filtered Values");
+        } else {
+            //filterTree.setPrefWidth(0);
+            filterMenu.setPrefWidth(0);
+            filterHeader.setText("");
+        }
+
     }
 
     //Settings button action handler
     public void settingsButtonClicked() throws IOException {
-        System.out.println("Setup view");
-        //Create dialog
-        Stage stage = new Stage();
-        Parent root;
-        root = FXMLLoader.load(getClass().getResource("/rpt/GUI/ProgramStrategist/CyclePlans/dialogSetColumns.fxml"));
 
-        stage.setScene(new Scene(root));
-        stage.setTitle("Set which columns to show");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait(); // pause until the user has selected a sheet
-
-        for (TableColumn<TableVariant, ?> col : tableVariants.getColumns()) {
-            if (visibleColumns.contains(col.getText())) {
-                col.setVisible(true);
-            } else {
-                col.setVisible(false);
-            }
+        if (settingsButton.isSelected()) {
+            settingsMenu.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            settingsHeader.setText("Hidden Columns");
+        } else {
+            //filterTree.setPrefWidth(0);
+            settingsMenu.setPrefWidth(0);
+            settingsHeader.setText("");
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         tableVariants.setEditable(true);
-        // specify a cell factory for each column
+        //Set the filter Predicate whenever the filter changes.
+        SortedList<TableVariant> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(tableVariants.comparatorProperty());
         //Push into the table
-        tableVariants.setItems(data);
+        tableVariants.setItems(sortedData);
 
         //Add Tooltip to the add and remove icons
         addButton.setTooltip(new Tooltip("Add new item"));
         removeButton.setTooltip(new Tooltip("Remove selected items"));
         saveButton.setTooltip(new Tooltip("Save"));
         importButton.setTooltip(new Tooltip("Import Cycleplan"));
+        compareButton.setTooltip(new Tooltip("Compare cycleplans"));
         exportButton.setTooltip(new Tooltip("Export data"));
         filterButton.setTooltip(new Tooltip("Filter table"));
         settingsButton.setTooltip(new Tooltip("Setup view"));
@@ -520,6 +633,72 @@ public class CyclePlansController implements Initializable {
             System.err.println("CyclePlansController line 470: " + e.getMessage());
         }
 
+        //Populate the filter TreeView
+        CheckBoxTreeItem<String> root;
+        //Root  
+        root = new CheckBoxTreeItem<String>("Filtered values");
+        root.setExpanded(true);
+        //TODO
+        //Fix this to allow image to be colored in case a filter is active
+//        root.selectedProperty().addListener((obs, oldVal, newVal) -> {
+//            System.out.println("Root intermediate: " + root.isIndeterminate());
+//            System.out.println("Root selected: " + root.isSelected());
+//        });
+        //TODO
+        //Note, this may be a bit inefficient
+        //consider how to map to root only as this will trigger for all changes
+        root.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), new EventHandler<TreeModificationEvent<Object>>() {
+
+            @Override
+            public void handle(TreeModificationEvent<Object> event) {
+                if (root.isSelected() || root.isIndeterminate()) {
+                    ColorAdjust blackout = new ColorAdjust();
+                    blackout.setSaturation(-1.0);
+                    
+                    //Bland blend = new Blend(BlendMode.MULTIPLY, blackout, )
+
+                    filterImage.setEffect(blackout);
+                    filterImage.setCache(true);
+                    filterImage.setCacheHint(CacheHint.SPEED);
+                } else {
+                    System.out.println("Inactive");
+                }
+            }
+        });
+        filterTree.setRoot(root);
+        //filterTree.setPrefWidth(0);
+        filterMenu.setPrefWidth(0);
+        // Set handlers
+        filterTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        //Create branches without icons
+        filterTree.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
+
+        //Populate the Hide columns TreeView
+        CheckBoxTreeItem<String> rootSettings;
+        rootSettings = new CheckBoxTreeItem<String>("All");
+        rootSettings.setExpanded(true);
+        settingsTree.setRoot(rootSettings);
+        settingsMenu.setPrefWidth(0);
+        settingsTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        settingsTree.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
     }
 
+    //Helper method for creating the filter tree
+    public CheckBoxTreeItem<String> makeBranchTreeItem(String title, CheckBoxTreeItem<String> parent) {
+        CheckBoxTreeItem<String> item = new CheckBoxTreeItem<String>(title);
+        item.setExpanded(false);
+        parent.getChildren().add(item);
+        return item;
+    }
+
+    private void updateVisibility() {
+        for (TableColumn<TableVariant, ?> col : tableVariants.getColumns()) {
+            if (visibleColumns.contains(col.getText())) {
+                col.setVisible(true);
+            } else {
+                col.setVisible(false);
+            }
+        }
+    }
 }

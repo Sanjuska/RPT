@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rpt.GUI.ProgramStrategist.CyclePlans;
+package rpt.GUI.Utils;
 
+import rpt.GUI.ProgramStrategist.CyclePlans.*;
 import javafx.css.SimpleStyleableIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,7 +14,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @author colak
  */
-public class TableVariant {
+public class VariantTableRow {
 
     //Used during initial testing
     private String variantID;
@@ -46,7 +47,7 @@ public class TableVariant {
     private String oldSOP; //Used for setting moved data during cycle plan comparison in CompareDialogController.java
     private String oldEOP; //Used for setting moved data during cycle plan comparison in CompareDialogController.java
 
-    public TableVariant() {
+    public VariantTableRow() {
         this.variantID = "";
         this.engineName = "";
         this.denomination = "";
@@ -74,7 +75,7 @@ public class TableVariant {
         this.endOfProd = "";
     }
 
-    public TableVariant(String plant, String platform, String vehicle, String propulsion,
+    public VariantTableRow(String plant, String platform, String vehicle, String propulsion,
             String denomination, String fuel, String engineFamily, String generation,
             String engineName, String engineCode, String displacement, String enginePower,
             String elMotorPower, String torque, String torqueOverBoost, String gearboxType,
