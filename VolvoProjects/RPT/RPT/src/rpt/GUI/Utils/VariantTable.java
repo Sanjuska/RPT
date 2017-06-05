@@ -1,8 +1,11 @@
+
 /*
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
+
+/* TO BE UNCOMMENTED
 package rpt.GUI.Utils;
 
 import java.sql.ResultSet;
@@ -27,16 +30,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import rpt.GUI.ProgramStrategist.CyclePlans.TableVariant;
 import rpt.RPT;
-
+*/
 /**
  *
  * @author colak
  */
+/*TO BE UNCOMMENTED
 public class VariantTable extends TableView<VariantTableRow> {
+*/
     /**
      * Initializes the controller class.
      */
     //Define table and buttons from FXML
+/*TO BE UNCOMMENTED
     @FXML
     public TableView<TableVariant> variantsTable;
     
@@ -162,6 +168,7 @@ public class VariantTable extends TableView<VariantTableRow> {
 //HERE ******************
 // Change from cycle plan to project
 // Read variants and add to table
+
 query = "SELECT * FROM VARIANTS, VariantBelongsToCyclePlan WHERE "
         + "VariantBelongsToCyclePlan.CyclePlanID= \'" + selectedCyclePlan + "\' AND VARIANTS.VariantID = VariantBelongsToCyclePlan.VariantID";
 ResultSet rs = statement.executeQuery(query);
@@ -325,3 +332,4 @@ settingsTree.setCellFactory(CheckBoxTreeCell.<String>forTreeView());
     
     
 }
+*/
